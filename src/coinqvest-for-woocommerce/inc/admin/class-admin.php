@@ -30,7 +30,7 @@ class Admin {
 			return;
 		}
 
-		$this->cq_wc_gateway = new WC_Gateway_Coinqvest($this->plugin_name_url, $this->plugin_basename);
+		$this->cq_wc_gateway = new WC_Gateway_Coinqvest($this->plugin_name_url, $this->plugin_basename, $this->version);
 
 		if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 
@@ -48,86 +48,5 @@ class Admin {
 		$methods[] = $this->cq_wc_gateway;
 		return $methods;
 	}
-
-	/**
-	 * Register the stylesheets for the admin area.
-	 */
-	public function enqueue_styles() {
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/coinqvest-admin.css', array(), $this->version, 'all' );
-	}
-
-	/**
-	 * Register the JavaScript for the admin area.
-	 */
-	public function enqueue_scripts() {
-		$params = array ( 'ajaxurl' => admin_url( 'admin-ajax.php' ) );
-		wp_enqueue_script( 'coinqvest_ajax_handle', plugin_dir_url( __FILE__ ) . 'js/coinqvest-admin-ajax-handler.js', array( 'jquery' ), $this->version, false );
-		wp_localize_script( 'coinqvest_ajax_handle', 'params', $params );
-	}
-
-
-	/**
-	 * form submits are handled here, both Ajax and POST (fallback if Ajax doesn't work)
-	 */
-	public function admin_form_response_handler() {
-
-		if ( !is_user_logged_in() ) {
-			exit;
-		}
-
-		$nonce = $_POST['_wpnonce'];
-		$task = $_POST['task'];
-
-//		switch ($task) {
-//
-//			case 'submit_api_settings':
-//
-//				if ( ! wp_verify_nonce( $nonce, 'submitApiSettings-23iyj@h!' ) ) {
-//					exit;
-//				}
-//				$this->settings = new Settings();
-//				$this->settings->submit_form_api_settings();
-//				break;
-//
-//			case 'submit_global_settings':
-//
-//				if ( ! wp_verify_nonce( $nonce, 'submitGlobalSettings-abg3@9' ) ) {
-//					exit;
-//				}
-//				$this->settings = new Settings();
-//				$this->settings->submit_form_global_settings();
-//				break;
-//
-//			case 'add_payment_button':
-//
-//				if ( ! wp_verify_nonce( $nonce, 'addPaymentButton-dfs!%sd' ) ) {
-//					exit;
-//				}
-//				$this->add_payment_button = new Add_Payment_Button();
-//				$this->add_payment_button->submit_form_add_payment_button();
-//				break;
-//
-//			case 'edit_payment_button':
-//
-//				if ( ! wp_verify_nonce( $nonce, 'editPaymentButton-dfs!%sd' ) ) {
-//					exit;
-//				}
-//				$this->edit_payment_button = new Edit_Payment_Button();
-//				$this->edit_payment_button->submit_form_edit_payment_button();
-//				break;
-//
-//		}
-
-	}
-
-	/**
-	 * Admin notices when form submit with POST (adds success/error parameters to URL)
-	 */
-	public function print_plugin_admin_notices() {
-		$this->admin_notices = new Admin_Helpers();
-		$this->admin_notices->print_plugin_admin_notices();
-	}
-
-
 
 }

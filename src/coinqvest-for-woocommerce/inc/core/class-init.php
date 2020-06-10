@@ -3,6 +3,7 @@
 namespace WC_COINQVEST\Inc\Core;
 use WC_COINQVEST as CQ;
 use WC_COINQVEST\Inc\Admin as Admin;
+use WC_COINQVEST\Inc\Frontend as Frontend;
 
 class Init {
 
@@ -87,8 +88,6 @@ class Init {
 	 * @access    private
 	 */
 	private function define_public_hooks() {
-
-
 
 	}
 

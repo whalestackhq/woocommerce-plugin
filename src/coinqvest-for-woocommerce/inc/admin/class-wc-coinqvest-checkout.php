@@ -15,16 +15,6 @@ class WC_Coinqvest_Checkout {
 
 		$order = new \WC_Order( $order_id );
 
-		$prods = $order->get_items();
-
-		Api\CQ_Logging_Service::write(print_r($prods, true));
-
-//		wc_add_notice( __('End of Code: ', 'coinqvest'), 'error' );
-//
-//		return array(
-//			'result' => 'error'
-//		);
-
 		/**
 		 * Init the COINQVEST API
 		 */
@@ -59,9 +49,7 @@ class WC_Coinqvest_Checkout {
 
 		if ($response->httpStatusCode != 200) {
 
-//			wc_add_notice(__('Failed to create customer. Please try again later.', 'coinqvest'));
-
-			wc_add_notice( __('Billing details error: ', 'coinqvest') . $response->responseBody, 'error' );
+			wc_add_notice(esc_html(__('Failed to create customer. ', 'coinqvest') .$response->responseBody, 'error'));
 
 			return array(
 				'result' => 'error'
@@ -83,7 +71,7 @@ class WC_Coinqvest_Checkout {
 
 			$lineItem = array(
 				"description" => $order_item['name'],
-				"netAmount" => round($order_item['subtotal'] / $order_item['quantity'], 7),
+				"netAmount" => $order_item['subtotal'] / $order_item['quantity'],
 				"quantity" => $order_item['quantity'],
 				"productId" =>  (string) $order_item['product_id']
 			);
@@ -103,7 +91,7 @@ class WC_Coinqvest_Checkout {
 
 			$discountItem = array(
 				"description" => $coupon['code'],
-				"netAmount" => round($coupon['discount'], 7),
+				"netAmount" => $coupon['discount'],
 //				"tax" => $coupon['discount_tax']
 			);
 
@@ -122,7 +110,7 @@ class WC_Coinqvest_Checkout {
 
 			$shippingCostItem = array(
 				"description" => $shipping_item['name'],
-				"netAmount" => round($shipping_item['total'], 7),
+				"netAmount" => $shipping_item['total'],
 //				"total_tax" => $shipping_item['total_tax'],
 				"taxable" => $shipping_item['total_tax'] == 0 ? false : true
 			);
@@ -188,9 +176,7 @@ class WC_Coinqvest_Checkout {
 
 		if ($response->httpStatusCode != 200) {
 
-//				"message" => esc_html(__('Failed to create checkout. Please try again later.', 'coinqvest'))
-
-			wc_add_notice( __('Checkout error: ', 'coinqvest') . $response->responseBody, 'error' );
+			wc_add_notice(esc_html(__('Failed to create checkout. ', 'coinqvest') . $response->responseBody, 'error'));
 
 			return array(
 				'result' => 'error'
@@ -205,10 +191,8 @@ class WC_Coinqvest_Checkout {
 		$id = $data['id'];
 		$url = $data['url'];
 
-		$order->update_meta_data( '_coinqvest_checkout_id', $id );
+		$order->update_meta_data('_coinqvest_checkout_id', esc_attr($id));
 		$order->save();
-
-		Api\CQ_Logging_Service::write("Order status for id " . $order->get_id() . ': ' . $order->get_status());
 
 		return array(
 			'result' => 'success',

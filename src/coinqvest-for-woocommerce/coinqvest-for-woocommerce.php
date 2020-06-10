@@ -35,8 +35,8 @@ require_once(PLUGIN_NAME_DIR . 'inc/libraries/autoloader.php');
 /**
  * Register Activation and Deactivation Hooks
  */
-//register_activation_hook(__FILE__, array(NS . 'Inc\Core\Activator', 'activate'));
-//register_deactivation_hook(__FILE__, array(NS . 'Inc\Core\Deactivator', 'deactivate'));
+register_activation_hook(__FILE__, array(NS . 'Inc\Core\Activator', 'activate'));
+register_deactivation_hook(__FILE__, array(NS . 'Inc\Core\Deactivator', 'deactivate'));
 
 
 /**
