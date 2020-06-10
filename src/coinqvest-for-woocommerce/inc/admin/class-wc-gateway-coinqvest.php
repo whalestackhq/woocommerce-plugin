@@ -45,19 +45,6 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 
     }
 
-    public function get_order_by_checkout_id( $query, $query_vars ) {
-
-        if ( ! empty( $query_vars['_coinqvest_checkout_id'] ) ) {
-            $query['meta_query'][] = array(
-                'key' => '_coinqvest_checkout_id',
-                'value' => esc_attr( $query_vars['_coinqvest_checkout_id'] ),
-            );
-        }
-
-        return $query;
-    }
-
-
 	/**
 	 * Initialise Gateway Settings Form Fields.
 	 */
