@@ -44,7 +44,6 @@ class Init {
 	 */
 	private function load_dependencies() {
 		$this->loader = new Loader();
-
 	}
 
 	/**
@@ -57,9 +56,9 @@ class Init {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Internationalization_i18n( $this->plugin_text_domain );
+		$plugin_i18n = new Internationalization_i18n($this->plugin_text_domain);
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
+		$this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
 
 	}
 
@@ -74,9 +73,9 @@ class Init {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Admin\Admin( $this->get_plugin_name(), $this->get_version(), $this->get_plugin_text_domain(), $this->get_plugin_name_url(), $this->get_plugin_basename() );
+		$plugin_admin = new Admin\Admin($this->get_plugin_name(), $this->get_version(), $this->get_plugin_text_domain(), $this->get_plugin_name_url(), $this->get_plugin_basename());
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_admin, 'init_wc_coinqvest' );
+		$this->loader->add_action('plugins_loaded', $plugin_admin, 'init_wc_coinqvest');
 
 	}
 

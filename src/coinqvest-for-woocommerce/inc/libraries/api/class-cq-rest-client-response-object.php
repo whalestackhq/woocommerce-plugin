@@ -1,7 +1,7 @@
 <?php
 namespace WC_COINQVEST\Inc\Libraries\Api;
 
-defined( 'ABSPATH' ) or exit;
+defined('ABSPATH') or exit;
 
 /**
  * Class CQ_Rest_Client_Response_Object

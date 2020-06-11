@@ -50,6 +50,7 @@ You can find the [plugin guide](https://www.coinqvest.com/en/blog/how-to-accept-
 1. Get your [API key and secret](https://www.coinqvest.com/en/api-settings) from your COINQVEST merchant account.
 1. Enter API key and secret into the COINQVEST settings page.
 1. Enable COINQVEST payments.
+1. Completed payments will automatically update WooCommerce orders to 'processing' (physical goods) or 'completed' (downloadable/virtual items).
 1. Manage all payments in your [merchant account](https://www.coinqvest.com). You will be notified by email about every new payment.
 
 == Frequently Asked Questions ==

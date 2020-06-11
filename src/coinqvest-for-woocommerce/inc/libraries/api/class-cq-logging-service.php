@@ -1,7 +1,7 @@
 <?php
 namespace WC_COINQVEST\Inc\Libraries\Api;
 
-defined( 'ABSPATH' ) or exit;
+defined('ABSPATH') or exit;
 
 /**
  * Class CQ_Logging_Service
@@ -23,11 +23,11 @@ class CQ_Logging_Service {
 	 */
 	public static function write($message, $level = 'info') {
 
-		if ( self::$log_enabled ) {
-			if ( empty( self::$log ) ) {
+		if (self::$log_enabled) {
+			if (empty( self::$log)) {
 				self::$log = wc_get_logger();
 			}
-			self::$log->log( $level, $message, array( 'source' => 'coinqvest' ) );
+			self::$log->log( $level, $message, array('source' => 'coinqvest'));
 		}
 	}
 

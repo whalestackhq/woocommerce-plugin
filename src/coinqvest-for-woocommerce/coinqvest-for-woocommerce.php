@@ -14,18 +14,18 @@
 
 namespace WC_COINQVEST;
 
-defined( 'ABSPATH' ) or exit;
+defined('ABSPATH') or exit;
 
 /**
  * Define Constants
  */
-define( __NAMESPACE__ . '\NS', __NAMESPACE__ . '\\' );
-define( NS . 'PLUGIN_NAME', 'coinqvest-for-woocommerce' );
-define( NS . 'PLUGIN_VERSION', '0.0.1' );
-define( NS . 'PLUGIN_NAME_DIR', plugin_dir_path( __FILE__ ) );
-define( NS . 'PLUGIN_NAME_URL', plugin_dir_url( __FILE__ ) );
-define( NS . 'PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( NS . 'PLUGIN_TEXT_DOMAIN', 'coinqvest-for-woocommerce' );
+define(__NAMESPACE__ . '\NS', __NAMESPACE__ . '\\');
+define(NS . 'PLUGIN_NAME', 'coinqvest-for-woocommerce');
+define(NS . 'PLUGIN_VERSION', '0.0.1');
+define(NS . 'PLUGIN_NAME_DIR', plugin_dir_path(__FILE__));
+define(NS . 'PLUGIN_NAME_URL', plugin_dir_url(__FILE__));
+define(NS . 'PLUGIN_BASENAME', plugin_basename(__FILE__));
+define(NS . 'PLUGIN_TEXT_DOMAIN', 'coinqvest-for-woocommerce');
 
 /**
  * Autoload Classes
@@ -48,7 +48,7 @@ class WC_COINQVEST {
 
 	public static function init() {
 
-		if ( null == self::$init ) {
+		if (null == self::$init) {
 			self::$init = new Inc\Core\Init();
 			self::$init->run();
 		}
@@ -65,6 +65,6 @@ function cqInit() {
 $min_php = '5.6.0';
 
 // Check the minimum required PHP version and run the plugin.
-if ( version_compare( PHP_VERSION, $min_php, '>=' ) ) {
+if (version_compare(PHP_VERSION, $min_php, '>=')) {
 	cqInit();
 }

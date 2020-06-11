@@ -3,7 +3,7 @@ namespace WC_COINQVEST\Inc\Admin;
 use WC_COINQVEST\Inc\Libraries\Api;
 use WC_Payment_Gateway;
 
-defined( 'ABSPATH' ) or exit;
+defined('ABSPATH') or exit;
 
 class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 
@@ -21,27 +21,27 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 
 		$this->id = 'wc_coinqvest';
 		$this->has_fields = false;
-		$this->order_button_text  = __( 'Proceed to COINQVEST', 'coinqvest' );
+		$this->order_button_text  = __('Proceed to COINQVEST', 'coinqvest');
 		$this->method_title = 'COINQVEST';
-		$this->method_description = __( 'Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, CAD, NGN).', 'coinqvest' );
+		$this->method_description = __('Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, CAD, NGN).', 'coinqvest');
 
 		// Define user set variables.
-		$this->title = $this->get_option( 'title' );
-		$this->description = $this->get_option( 'description' );
+		$this->title = $this->get_option('title');
+		$this->description = $this->get_option('description');
 		$this->api_key = $this->get_option('api_key');
 		$this->api_secret = $this->get_option('api_secret');
-		$this->debug = 'yes' === $this->get_option( 'debug', 'no' );
+		$this->debug = 'yes' === $this->get_option('debug', 'no');
 		Api\CQ_Logging_Service::$log_enabled = $this->debug;
 
 		// Load the settings.
 		$this->init_form_fields();
 		$this->init_settings();
 
-        add_action( 'wp_enqueue_scripts', array( $this, 'payment_scripts' ) );
-		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-		add_action( 'woocommerce_api_wc_coinqvest', array( $this, 'handle_webhook' ) );
-		add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'plugin_action_links' ) );
-        add_action( 'woocommerce_admin_order_data_after_order_details', array( $this, 'display_coinqvest_payment_data_in_order') );
+		add_action('wp_enqueue_scripts', array($this, 'payment_scripts'));
+		add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
+		add_action('woocommerce_api_wc_coinqvest', array($this, 'handle_webhook'));
+		add_filter('plugin_action_links_' . $plugin_basename, array($this, 'plugin_action_links'));
+		add_action('woocommerce_admin_order_data_after_order_details', array($this, 'display_coinqvest_payment_data_in_order'));
 
     }
 
@@ -80,14 +80,14 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 	 */
 	public function get_icon() {
 
-		if ( $this->get_option( 'show_icons' ) === 'no' ) {
+		if ($this->get_option('show_icons') === 'no') {
 			return '';
 		}
 
 		$url = $this->plugin_name_url . 'assets/images/wc-cq-logo.png';
-		$icon = '<img class="coinqvest-checkout-logo" src="' . esc_attr( $url ) . '" />';
+		$icon = '<img class="coinqvest-checkout-logo" src="' . esc_attr($url) . '" />';
 
-		return apply_filters( 'woocommerce_gateway_icon', $icon, $this->id );
+		return apply_filters('woocommerce_gateway_icon', $icon, $this->id);
 	}
 
 	/**
@@ -96,7 +96,7 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 	public function plugin_action_links($links) {
 
 		$plugin_links = array(
-			'<a href="admin.php?page=wc-settings&tab=checkout&section=wc_coinqvest">' . esc_html__( 'Settings', 'coinqvest-for-woocommerce' ) . '</a>',
+			'<a href="admin.php?page=wc-settings&tab=checkout&section=wc_coinqvest">' . esc_html__('Settings', 'coinqvest-for-woocommerce') . '</a>',
 		);
 		return array_merge($plugin_links, $links);
 	}
@@ -107,7 +107,7 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 	public function init_settings() {
 
 		parent::init_settings();
-		$this->enabled = ! empty( $this->settings['enabled'] ) && 'yes' === $this->settings['enabled'] ? 'yes' : 'no';
+		$this->enabled = !empty($this->settings['enabled']) && 'yes' === $this->settings['enabled'] ? 'yes' : 'no';
 	}
 
 	/**
@@ -135,7 +135,7 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
     /**
      * Adds extra fields in the admin order view
      */
-    function display_coinqvest_payment_data_in_order( $order ){
+    function display_coinqvest_payment_data_in_order($order){
 
         $cq_checkout_id = null;
         $cq_payment_id = null;
@@ -154,10 +154,9 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
         if ($cq_checkout_id) {
 
             ?>
-
             <p class="form-field form-field-wide">
                 <br />
-                <h4><?php echo __('COINQVEST Payment Details', 'coinqvest'); ?></h4>
+                <h4><?php echo __('COINQVEST Payment Details', 'coinqvest');?></h4>
                 <p>
                     <?php
                     echo  __('Checkout Id', 'coinqvest') . ': ' . esc_html($cq_checkout_id);
@@ -167,8 +166,6 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
                     }
                     ?>
                 </p>
-
-
             </p>
             <?php
         }
@@ -176,8 +173,8 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 
     public function payment_scripts() {
 
-        wp_register_style( 'coinqvest_styles', $this->plugin_name_url . 'assets/css/wc-coinqvest.css',  array(), $this->version, 'all' );
-        wp_enqueue_style( 'coinqvest_styles' );
+        wp_register_style('coinqvest_styles', $this->plugin_name_url . 'assets/css/wc-coinqvest.css', array(), $this->version, 'all');
+        wp_enqueue_style('coinqvest_styles');
     }
 
 }

@@ -2,10 +2,9 @@
 namespace WC_COINQVEST\Inc\Admin;
 use WC_COINQVEST\Inc\Libraries\Api;
 
-defined( 'ABSPATH' ) or exit;
+defined('ABSPATH') or exit;
 
 class WC_Coinqvest_Checkout {
-
 
 	public function __construct() {
 
@@ -13,7 +12,7 @@ class WC_Coinqvest_Checkout {
 
 	public function create_checkout($order_id, $options) {
 
-		$order = new \WC_Order( $order_id );
+		$order = new \WC_Order($order_id);
 
 		/**
 		 * Init the COINQVEST API
@@ -49,7 +48,7 @@ class WC_Coinqvest_Checkout {
 
 		if ($response->httpStatusCode != 200) {
 
-			wc_add_notice(esc_html(__('Failed to create customer. ', 'coinqvest') .$response->responseBody, 'error'));
+			wc_add_notice(esc_html(__('Failed to create customer. ', 'coinqvest') . $response->responseBody, 'error'));
 
 			return array(
 				'result' => 'error'
@@ -91,8 +90,7 @@ class WC_Coinqvest_Checkout {
 
 			$discountItem = array(
 				"description" => $coupon['code'],
-				"netAmount" => $coupon['discount'],
-//				"tax" => $coupon['discount_tax']
+				"netAmount" => $coupon['discount']
 			);
 
 			array_push($discountItems, $discountItem);
@@ -111,7 +109,6 @@ class WC_Coinqvest_Checkout {
 			$shippingCostItem = array(
 				"description" => $shipping_item['name'],
 				"netAmount" => $shipping_item['total'],
-//				"total_tax" => $shipping_item['total_tax'],
 				"taxable" => $shipping_item['total_tax'] == 0 ? false : true
 			);
 
@@ -130,10 +127,7 @@ class WC_Coinqvest_Checkout {
 
 			$taxItem = array(
 				"name" => $tax_item['label'],
-				"percent" => $tax_item['rate_percent'] / 100,
-//				"items_tax_total" => $tax_item['tax_total'],
-//				"shipping_tax_total" => $tax_item['shipping_tax_total'],
-//				"tax_total" => $order->get_total_tax()
+				"percent" => $tax_item['rate_percent'] / 100
 			);
 
 			array_push($taxItems, $taxItem);
@@ -168,9 +162,9 @@ class WC_Coinqvest_Checkout {
 		$checkout['links']['cancelUrl'] = $this->get_cancel_url($order);
 
 
-		// for debugging, only when debug = on
-		Api\CQ_Logging_Service::write(print_r($checkout, true));
-
+        /**
+         * Post the checkout
+         */
 
 		$response = $client->post('/checkout/hosted', $checkout);
 
@@ -206,14 +200,14 @@ class WC_Coinqvest_Checkout {
 	 * @param WC_Order $order Order object.
 	 * @return string
 	 */
-	public function get_return_url( $order = null ) {
-		if ( $order ) {
+	public function get_return_url($order = null) {
+		if ($order) {
 			$return_url = $order->get_checkout_order_received_url();
 		} else {
-			$return_url = wc_get_endpoint_url( 'order-received', '', wc_get_checkout_url() );
+			$return_url = wc_get_endpoint_url('order-received', '', wc_get_checkout_url());
 		}
 
-		return apply_filters( 'woocommerce_get_return_url', $return_url, $order );
+		return apply_filters('woocommerce_get_return_url', $return_url, $order);
 	}
 
 	/**
@@ -222,14 +216,14 @@ class WC_Coinqvest_Checkout {
 	 * @param WC_Order $order Order object.
 	 * @return string
 	 */
-	public function get_cancel_url( $order ) {
+	public function get_cancel_url($order) {
 		$return_url = $order->get_cancel_order_url();
 
-		if ( is_ssl() || get_option( 'woocommerce_force_ssl_checkout' ) == 'yes' ) {
-			$return_url = str_replace( 'http:', 'https:', $return_url );
+		if (is_ssl() || get_option('woocommerce_force_ssl_checkout') == 'yes') {
+			$return_url = str_replace('http:', 'https:', $return_url);
 		}
 
-		return apply_filters( 'woocommerce_get_cancel_url', $return_url, $order );
+		return apply_filters('woocommerce_get_cancel_url', $return_url, $order);
 	}
 
 	/**
@@ -238,7 +232,7 @@ class WC_Coinqvest_Checkout {
 	 * @return string
 	 */
 	public function get_webhook_url() {
-		return add_query_arg( 'wc-api', 'WC_COINQVEST', trailingslashit( get_home_url() ) );
+		return add_query_arg('wc-api', 'WC_COINQVEST', trailingslashit(get_home_url()));
 	}
 
 
