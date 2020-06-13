@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: COINQVEST for WooCommerce
- * Description: Enterprise Cryptocurrency Payment Processor - Accept Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Stellar Lumens (XLM) and Litecoin (LTC) from your clients and instantly settle in your preferred payout currency like USD, EUR, CAD, NGN.
+ * Description: Enterprise Cryptocurrency Payment Processor for WooCommerce - Accept Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Stellar Lumens (XLM) and Litecoin (LTC) from your clients and instantly settle in your preferred payout currency like USD, EUR, CAD, NGN.
  * Author: COINQVEST
  * Author URI: https://www.coinqvest.com/
  * Version: 0.0.1

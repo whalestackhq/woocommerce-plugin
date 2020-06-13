@@ -1,7 +1,7 @@
 === COINQVEST for WooCommerce - Bitcoin and other crypto payment processing ===
 Contributors: coinqvest
 Tags: woocommerce, crypto, cryptocurrency, payments, payment gateway, payment processing, digital currencies, bitcoin, stellar, lumens, xlm, btc, eth, xrp, ltc, EUR, USD, CAD, NGN
-Requires at least: 4.9
+Requires at least: 3.9
 Tested up to: 5.4
 Stable tag: 0.1
 Requires PHP: 5.6
