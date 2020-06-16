@@ -8,7 +8,7 @@ Requires PHP: 5.6
 License: Apache 2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
-Accept digital currencies from your clients and settle instantly in your preferred national payout currency.
+Accept digital currencies from your clients and settle instantly in your preferred national payout currency (USD, EUR, CAD, BRL, NGN).
 
 == Description ==
 
