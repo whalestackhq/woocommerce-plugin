@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: COINQVEST for WooCommerce v0.0.1\n"
-"POT-Creation-Date: 2020-06-10 10:38+0200\n"
+"POT-Creation-Date: 2020-06-16 09:18+0200\n"
 "PO-Revision-Date: 2020-05-23 10:41+0200\n"
 "Last-Translator: \n"
 "Language-Team: COINQVEST www.coinqvest.com\n"
@@ -17,90 +17,90 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: class-wc-coinqvest-admin-form.php:44
+#: class-wc-coinqvest-admin-form.php:43
 msgid "Enable/Disable"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:46
+#: class-wc-coinqvest-admin-form.php:45
 msgid "Enable COINQVEST Payments"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:50
+#: class-wc-coinqvest-admin-form.php:49
 msgid "Title"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:52
+#: class-wc-coinqvest-admin-form.php:51
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:53
+#: class-wc-coinqvest-admin-form.php:52
 msgid "Bitcoin and other cryptocurrencies"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:57
+#: class-wc-coinqvest-admin-form.php:56
 msgid "Description"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:60
+#: class-wc-coinqvest-admin-form.php:59
 msgid "This controls the description which the user sees during checkout."
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:61
+#: class-wc-coinqvest-admin-form.php:60
 msgid "Pay with BTC, ETH, XRP, XLM, LTC"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:64
+#: class-wc-coinqvest-admin-form.php:63
 msgid "API Key"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:66
+#: class-wc-coinqvest-admin-form.php:65
 #, php-format
 msgid "Get your API Key from the COINQVEST Settings page, available %s."
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:69
+#: class-wc-coinqvest-admin-form.php:68
 msgid "API Secret"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:71
+#: class-wc-coinqvest-admin-form.php:70
 #, php-format
 msgid "Get your API Secret from the COINQVEST Settings page, available %s."
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:74
+#: class-wc-coinqvest-admin-form.php:73
 msgid "Settlement Currency"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:76
+#: class-wc-coinqvest-admin-form.php:75
 msgid "The currency that the crypto payments get converted to. If you don't choose a currency here, the settlement currency will be the billing currency. API credentials must be provided before currency options show up."
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:82
+#: class-wc-coinqvest-admin-form.php:81
 msgid "Show icons"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:84
+#: class-wc-coinqvest-admin-form.php:83
 msgid "Display currency icons on checkout page."
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:88
+#: class-wc-coinqvest-admin-form.php:87
 msgid "Debug log"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:90
+#: class-wc-coinqvest-admin-form.php:89
 msgid "Enable logging"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:92
+#: class-wc-coinqvest-admin-form.php:91
 #, php-format
 msgid "Log COINQVEST API events inside %s"
 msgstr ""
 
-#: class-wc-coinqvest-checkout.php:52
+#: class-wc-coinqvest-checkout.php:51
 msgid "Failed to create customer. "
 msgstr ""
 
-#: class-wc-coinqvest-checkout.php:179
+#: class-wc-coinqvest-checkout.php:173
 msgid "Failed to create checkout. "
 msgstr ""
 
@@ -125,38 +125,38 @@ msgstr ""
 msgid "COINQVEST payment was processed, but some generic error occurred. Please contact your account manager."
 msgstr ""
 
-#: class-wc-gateway-coinqvest.php:22
+#: class-wc-gateway-coinqvest.php:24
 msgid "Proceed to COINQVEST"
 msgstr ""
 
-#: class-wc-gateway-coinqvest.php:24
-msgid "Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, CAD, NGN)."
+#: class-wc-gateway-coinqvest.php:26
+msgid "Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, CAD, NGN, BRL)."
 msgstr ""
 
-#: class-wc-gateway-coinqvest.php:74
+#: class-wc-gateway-coinqvest.php:64
 msgid "API Key seems to be wrong. Please double check."
 msgstr ""
 
-#: class-wc-gateway-coinqvest.php:83
+#: class-wc-gateway-coinqvest.php:73
 msgid "API Secret seems to be wrong. Please double check."
 msgstr ""
 
-#: class-wc-gateway-coinqvest.php:168
+#: class-wc-gateway-coinqvest.php:159
 msgid "COINQVEST Payment Details"
 msgstr ""
 
-#: class-wc-gateway-coinqvest.php:171
+#: class-wc-gateway-coinqvest.php:162
 msgid "Checkout Id"
 msgstr ""
 
-#: class-wc-gateway-coinqvest.php:173
+#: class-wc-gateway-coinqvest.php:164
 msgid "Payment Id"
 msgstr ""
 
-#: class-wc-gateway-coinqvest.php:174
+#: class-wc-gateway-coinqvest.php:165
 msgid "View payment details "
 msgstr ""
 
-#: class-wc-gateway-coinqvest.php:174
+#: class-wc-gateway-coinqvest.php:165
 msgid "here"
 msgstr ""

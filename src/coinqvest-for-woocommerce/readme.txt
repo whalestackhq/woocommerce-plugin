@@ -1,6 +1,6 @@
-=== COINQVEST for WooCommerce - Bitcoin and other crypto payment processing ===
+=== COINQVEST for WooCommerce - Bitcoin and Altcoin Cryptocurrency Payment Processing ===
 Contributors: coinqvest
-Tags: woocommerce, crypto, cryptocurrency, payments, payment gateway, payment processing, digital currencies, bitcoin, stellar, lumens, xlm, btc, eth, xrp, ltc, EUR, USD, CAD, NGN
+Tags: woocommerce, crypto, cryptocurrency, payments, payment gateway, payment processing, digital currencies, bitcoin, stellar, lumens, xlm, btc, eth, xrp, ltc, EUR, USD, CAD, NGN, BRL
 Requires at least: 3.9
 Tested up to: 5.4
 Stable tag: 0.1
@@ -8,18 +8,19 @@ Requires PHP: 5.6
 License: Apache 2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
-Accept digital currencies from your clients and settle instantly in your preferred national payout currency.
+Accept digital currencies from your clients and settle instantly in your preferred national payout currency (USD, EUR, CAD, BRL, NGN).
 
 == Description ==
 
-COINQVEST provides digital currency checkouts that automatically go from Bitcoin to your bank account, in minutes. COINQVEST helps you programmatically accept and settle payments in new digital currencies while staying compliant, keeping your accountants and tax authorities happy. With COINQVEST, sales can be denominated and settled in your local fiat currency (e.g. EUR, USD or NGN) regardless of whether your customers pay in Bitcoin, Ethereum or Stellar Lumens.
+COINQVEST provides digital currency checkouts that automatically go from Bitcoin to your bank account, in minutes. COINQVEST helps you programmatically accept and settle payments in new digital currencies while staying compliant, keeping your accountants and tax authorities happy. With COINQVEST, sales can be denominated and settled in your local fiat currency (e.g. EUR, USD, CAD, BRL or NGN) regardless of whether your customers pay in Bitcoin, Ethereum or Stellar Lumens.
 
 = Key features =
 
 * Accepts Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Stellar Lumens (XLM) and Litecoin (LTC) payments from customers.
-* Instantly settles in your preferred national currency (USD, EUR, CAD, NGN).
+* Instantly settles in your preferred national currency (USD, EUR, CAD, NGN, BRL).
 * Integrates seemlessly into WooCommerce
 * Sets the product price in your national currency.
+* Automatically generates invoices.
 * Eliminates chargebacks and gives you control over refunds.
 * Eliminates currency volatility risks due to instant conversions and settlement.
 * Translates the plugin into any required language.
@@ -69,3 +70,7 @@ Do you have questions or issues with COINQVEST? Feel free to contact us anytime!
 4. COINQVEST Instant Withdrawals
 
 == Changelog ==
+
+= 0.0.2 =
+
+* Added Brazilian Real (BRL) as settlement currency

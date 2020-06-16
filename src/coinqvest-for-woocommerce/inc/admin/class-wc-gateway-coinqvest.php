@@ -23,7 +23,7 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 		$this->has_fields = false;
 		$this->order_button_text  = __('Proceed to COINQVEST', 'coinqvest');
 		$this->method_title = 'COINQVEST';
-		$this->method_description = __('Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, CAD, NGN).', 'coinqvest');
+		$this->method_description = __('Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, CAD, NGN, BRL).', 'coinqvest');
 
 		// Define user set variables.
 		$this->title = $this->get_option('title');
