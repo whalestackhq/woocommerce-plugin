@@ -62,12 +62,12 @@ class WC_Coinqvest_Admin_Form {
 			'api_key' => array(
 				'title' => __('API Key', 'coinqvest'),
 				'type' => 'text',
-				'description' => sprintf(__('Get your API Key from the COINQVEST Settings page, available %s.', 'coinqvest'), '<a href="https://www.coinqvest.com/en/api-settings" target="_blank">here</a>'),
+				'description' => sprintf(__('Get your API Key from the COINQVEST Settings page, available %s.', 'coinqvest'), '<a href="https://www.coinqvest.com/en/api-settings?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']) . '" target="_blank">here</a>'),
 			),
 			'api_secret' => array(
 				'title' => __('API Secret', 'coinqvest'),
 				'type' => 'text',
-				'description' => sprintf(__('Get your API Secret from the COINQVEST Settings page, available %s.', 'coinqvest'), '<a href="https://www.coinqvest.com/en/api-settings" target="_blank">here</a>')
+				'description' => sprintf(__('Get your API Secret from the COINQVEST Settings page, available %s.', 'coinqvest'), '<a href="https://www.coinqvest.com/en/api-settings?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']) . '" target="_blank">here</a>')
 			),
 			'settlement_currency' => array(
 				'title' => __('Settlement Currency', 'coinqvest'),
