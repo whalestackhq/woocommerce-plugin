@@ -23,9 +23,9 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 		$this->has_fields = false;
 		$this->order_button_text  = __('Proceed to COINQVEST', 'coinqvest');
 		$this->method_title = 'COINQVEST';
-		$this->method_description = __('Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, CAD, NGN, BRL).', 'coinqvest');
+        $this->method_description = sprintf( __('Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, CAD, NGN, BRL). <a href="%1$s" target="_blank">Sign up</a> for a COINQVEST merchant account and <a href="%2$s" target="_blank">get your API credentials</a>.', 'coinqvest'), 'https://www.coinqvest.com?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']), 'https://www.coinqvest.com/en/api-settings?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']));
 
-		// Define user set variables.
+        // Define user set variables.
 		$this->title = $this->get_option('title');
 		$this->description = $this->get_option('description');
 		$this->api_key = $this->get_option('api_key');
