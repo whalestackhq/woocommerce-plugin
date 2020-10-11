@@ -134,4 +134,21 @@ class Init {
 		return $this->plugin_basename;
 	}
 
+    public function get_plugin_data() {
+	    global $wp_version;
+	    $wp = 'WP ' . $wp_version;
+	    $woo = 'Woo ' . $this->get_woo_version();
+        $cq = 'CQ ' . $this->get_version();
+	    return $wp . ', ' . $woo . ', ' . $cq;
+    }
+
+    public function get_woo_version() {
+        if ( class_exists( 'WooCommerce' ) ) {
+            global $woocommerce;
+            return $woocommerce->version;
+
+        }
+        return 'n/a';
+    }
+
 }
