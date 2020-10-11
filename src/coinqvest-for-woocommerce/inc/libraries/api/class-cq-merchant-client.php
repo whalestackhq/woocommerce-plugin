@@ -1,5 +1,6 @@
 <?php
 namespace WC_COINQVEST\Inc\Libraries\Api;
+use WC_COINQVEST\Inc\Core\Init;
 
 defined('ABSPATH') or exit;
 
@@ -39,7 +40,7 @@ class CQ_Merchant_Client extends CQ_Rest_Client {
      *
      * @var string
      */
-    var $clientName = 'php-merchant-sdk-WP';
+    var $clientName = 'php-merchant-sdk-woo';
 
     /**
      * The current version of this SDK, used in the HTTP user agent (leave it as is)
@@ -156,10 +157,14 @@ class CQ_Merchant_Client extends CQ_Rest_Client {
 
         $timestamp = time();
         $body = $method != 'GET' ? (count($params) ? json_encode($params) : null) : null;
+        $origin = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : null;
+        $version_data = new Init();
         return array(
             'X-Digest-Key: ' . $this->key,
             'X-Digest-Signature: ' . hash_hmac('sha256', $path . $timestamp . $method . $body, $this->secret),
-            'X-Digest-Timestamp: ' . $timestamp
+            'X-Digest-Timestamp: ' . $timestamp,
+            'X-Origin-URL: ' . $origin,
+            'X-Plugin-Data: ' . $version_data->get_plugin_data()
         );
 
     }

@@ -71,6 +71,10 @@ Do you have questions or issues with COINQVEST? Feel free to contact us anytime!
 
 == Changelog ==
 
+= 0.0.4 =
+
+* Reduced number of requests to COINQVEST API
+
 = 0.0.3 =
 
 * Tested for WordPress 5.5 and WooCommerce 4.3.2

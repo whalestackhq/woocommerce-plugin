@@ -16,27 +16,33 @@ class WC_Coinqvest_Admin_Form {
 			'0' => 'Select currency ...'
 		);
 
-		if (!empty($api_key) && !empty($api_secret)) {
+        $parts = parse_url($_SERVER['REQUEST_URI']);
 
-			$client = new Api\CQ_Merchant_Client(
-				$api_key,
-				$api_secret,
-				true
-			);
+        if (isset($parts['query']) && $parts['query'] == 'page=wc-settings&tab=checkout&section=wc_coinqvest') {
 
-			$response = $client->get('/fiat-currencies');
+            if (!empty($api_key) && !empty($api_secret)) {
 
-			if ($response->httpStatusCode == 200) {
+                $client = new Api\CQ_Merchant_Client(
+                    $api_key,
+                    $api_secret,
+                    true
+                );
 
-				$fiats = json_decode($response->responseBody);
+                $response = $client->get('/fiat-currencies');
 
-				foreach ($fiats->fiatCurrencies as $currency) {
+                if ($response->httpStatusCode == 200) {
 
-					$fiat_currencies[$currency->assetCode] = esc_html($currency->assetCode) . ' - ' . esc_html($currency->assetName);
+                    $fiats = json_decode($response->responseBody);
 
-				}
-			}
-		}
+                    foreach ($fiats->fiatCurrencies as $currency) {
+
+                        $fiat_currencies[$currency->assetCode] = esc_html($currency->assetCode) . ' - ' . esc_html($currency->assetName);
+
+                    }
+                }
+            }
+
+        }
 
 		$form_fields = array(
 			'enabled' => array(
@@ -78,9 +84,9 @@ class WC_Coinqvest_Admin_Form {
 				'desc_tip' => true,
 			),
 			'show_icons' => array(
-				'title' => __('Show icons', 'coinqvest'),
+				'title' => __('Show logo', 'coinqvest'),
 				'type' => 'checkbox',
-				'label' => __('Display currency icons on checkout page.', 'coinqvest'),
+				'label' => __('Display COINQVEST logo on checkout page.', 'coinqvest'),
 				'default' => 'yes',
 			),
 			'debug' => array(
