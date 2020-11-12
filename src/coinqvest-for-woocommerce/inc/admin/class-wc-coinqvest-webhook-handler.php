@@ -33,23 +33,26 @@ class WC_Coinqvest_Webhook_Handler {
 
 		if (!empty($payload) && $this->validate_webhook($request_headers, $payload)) {
 
-			$payment = json_decode($payload, true);
+			$payload_decoded = json_decode($payload, true);
 
-			$orders = wc_get_orders(array('_coinqvest_checkout_id' => $payment['checkoutId']));
+			$orders = wc_get_orders(array('_coinqvest_checkout_id' => $payload_decoded['checkoutId']));
 
 			if (empty($orders)) {
 				exit;
 			}
 
 			$order = new \WC_Order($orders[0]);
-			$this->_update_order_status($order, $payment);
+			$this->_update_order_status($order, $payload_decoded);
 
 			status_header(200);
 			exit;
 
 		} else {
 
-			CQ_Logging_Service::write('Incoming webhook failed validation: ' . print_r( $payload, true));
+//            CQ_Logging_Service::write('Incoming webhook failed validation: ' . print_r( $payload, true));
+
+            $logger = wc_get_logger();
+            $logger->debug('Incoming webhook failed validation: ' . print_r( $payload, true), array( 'source' => 'coinqvest'));
 
 			status_header(400);
 			exit;
@@ -121,47 +124,70 @@ class WC_Coinqvest_Webhook_Handler {
 	 * Update the status of an order.
 	 * @param  WC_Order $order
 	 */
-	public function _update_order_status($order, $payment) {
+	public function _update_order_status($order, $payload) {
 
-		CQ_Logging_Service::write('Webhook Payload: ' . print_r($payment, true));
+        $logger = wc_get_logger();
+        $logger->debug(print_r($payload, true), array( 'source' => 'coinqvest'));
 
-		$wc_order_state = $order->get_status();
-		$cq_payment_state = $payment['state'];
+        $woo_order_id = $order->get_id();
+        $woo_order_state = $order->get_status();
 
-		if (in_array($wc_order_state, array('processing', 'completed'))) {
+		if (in_array($woo_order_state, array('processing', 'completed'))) {
 			return;
 		}
 
-		$payment_page = 'https://www.coinqvest.com/en/payment/' . $payment['id'];
+        if (isset($payload['eventType'])) {
 
-		if ($wc_order_state == 'pending' && $cq_payment_state == 'RESOLVED') {
+            $cq_payload_state = $payload['eventType'];
+            $checkout = $payload['data']['checkout'];
 
-			$order->update_status('processing', __( 'COINQVEST payment was successfully processed.', 'coinqvest'));
-			$order->add_order_note(sprintf(__( 'Find COINQVEST payment details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_page )));
-			$order->payment_complete();
-		}
+            if ($cq_payload_state == 'CHECKOUT_COMPLETED') {
 
-		if ($wc_order_state == 'pending' && $cq_payment_state == 'UNRESOLVED') {
+                if (in_array($woo_order_state, array('on-hold', 'pending', 'canceled'))) {
 
-			$order->update_status('on-hold', __('COINQVEST payment was processed, but some generic error occurred.', 'coinqvest'));
-			$order->add_order_note(__('COINQVEST payment was processed, but some generic error occurred. Please contact your account manager.', 'coinqvest'));
-		}
+                    $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $checkout['id'];
 
-		if ($wc_order_state == 'canceled' && $cq_payment_state == 'RESOLVED') {
+                    $order->update_status('processing');
+                    $order->add_order_note('<span style="color:#079047">' . sprintf(__('COINQVEST payment was successfully processed. Find payment details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>');
+                    $order->payment_complete();
 
-			$order->update_status('processing', __('COINQVEST payment was successfully processed.', 'coinqvest'));
-            $order->add_order_note(sprintf(__('Find COINQVEST payment details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_page )));
-			$order->payment_complete();
-		}
+                }
 
-		if ($wc_order_state == 'canceled' && $cq_payment_state == 'UNRESOLVED') {
+            } else if ($cq_payload_state == 'CHECKOUT_UNDERPAID') {
 
-            $order->update_status('on-hold', __('COINQVEST payment was processed, but some generic error occurred.', 'coinqvest'));
-            $order->add_order_note(__('COINQVEST payment was processed, but some generic error occurred. Please contact your account manager.', 'coinqvest'));
-		}
+                if (in_array($woo_order_state, array('on-hold', 'pending', 'canceled'))) {
 
-        $order->update_meta_data('_coinqvest_payment_id', esc_attr($payment['id']));
-        $order->save();
+                    $payment_details_page = 'https://www.coinqvest.com/en/unresolved-charge/checkout-id/' . $checkout['id'];
+
+                    $order->update_status('on-hold');
+                    $order->add_order_note('<span style="color:#cc292f">' . sprintf(__('COINQVEST payment was underpaid by customer. See details and options to resolve it <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>');
+
+                }
+
+            } else if ($cq_payload_state == 'UNDERPAID_ACCEPTED') {
+
+                if (in_array($woo_order_state, array('on-hold', 'pending', 'canceled'))) {
+
+                    $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $checkout['id'];
+                    $underpaid_accepted_price = $checkout['settlementAmountReceived'] . ' ' . $order->get_currency();
+
+                    $order->update_status('processing');
+                    $order->add_order_note('<span style="color:#079047">' . sprintf(__('Underpaid by customer, but payment manually accepted at %1$s and completed. Find payment details <a href="%2$s" target="_blank">here</a>.', 'coinqvest'), esc_attr($underpaid_accepted_price), esc_url($payment_details_page)) . '</span>');
+                    $order->payment_complete();
+                    $order->update_meta_data('_coinqvest_underpaid_accepted_price', esc_attr($underpaid_accepted_price));
+
+                }
+
+            } else {
+
+                $logger->debug('Unresolved payload event for order id ' . $woo_order_id . print_r($payload, true), array( 'source' => 'coinqvest'));
+
+            }
+
+            $order->update_meta_data('_coinqvest_payment_state', esc_attr($cq_payload_state));
+            $order->save();
+
+        }
 
 	}
 

@@ -23,7 +23,7 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 		$this->has_fields = false;
 		$this->order_button_text  = __('Proceed to COINQVEST', 'coinqvest');
 		$this->method_title = 'COINQVEST';
-        $this->method_description = sprintf( __('Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, CAD, NGN, BRL). <a href="%1$s" target="_blank">Sign up</a> for a COINQVEST merchant account and <a href="%2$s" target="_blank">get your API credentials</a>.', 'coinqvest'), 'https://www.coinqvest.com?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']), 'https://www.coinqvest.com/en/api-settings?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']));
+        $this->method_description = sprintf( __('Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, NGN, BRL). <a href="%1$s" target="_blank">Sign up</a> for a COINQVEST merchant account and <a href="%2$s" target="_blank">get your API credentials</a>.', 'coinqvest'), 'https://www.coinqvest.com?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']), 'https://www.coinqvest.com/en/api-settings?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']));
 
         // Define user set variables.
 		$this->title = $this->get_option('title');
@@ -138,34 +138,48 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
     function display_coinqvest_payment_data_in_order($order){
 
         $cq_checkout_id = null;
-        $cq_payment_id = null;
-
+        $cq_payment_state = null;
+        $cq_underpaid_accepted_price = null;
+        $display_info = null;
         $meta_data = $order->get_meta_data();
 
         foreach ($meta_data as $item) {
             if ($item->key == '_coinqvest_checkout_id') {
                 $cq_checkout_id = $item->value;
             }
-            if ($item->key == '_coinqvest_payment_id') {
-                $cq_payment_id = $item->value;
+            if ($item->key == '_coinqvest_payment_state') {
+                $cq_payment_state = $item->value;
+            }
+            if ($item->key == '_coinqvest_underpaid_accepted_price') {
+                $cq_underpaid_accepted_price = $item->value;
             }
         }
 
         if ($cq_checkout_id) {
 
+            if ($cq_payment_state == 'CHECKOUT_COMPLETED') {
+
+                $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $cq_checkout_id;
+                $display_info = '<span style="color: #079047">' . sprintf(__('Payment was successfully completed. Find payment details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>';
+
+            } else if ($cq_payment_state == 'CHECKOUT_UNDERPAID') {
+
+                $payment_details_page = 'https://www.coinqvest.com/en/unresolved-charge/checkout-id/' . $cq_checkout_id;
+                $display_info = '<span style="color: #cc292f">' . sprintf(__('Action required: Payment was underpaid by customer. Go to the payment details page to resolve it <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>';
+
+
+            } else if ($cq_payment_state == 'UNDERPAID_ACCEPTED') {
+
+                $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $cq_checkout_id;
+                $display_info = '<span style="color: #079047">' . sprintf(__('This checkout was originally billed at %1$s but underpaid by your customer and manually accepted at %2$s. Find payment details <a href="%3$s" target="_blank">here</a>.', 'coinqvest'), esc_attr($order->get_total() . ' ' . $order->get_currency()), esc_attr($cq_underpaid_accepted_price), esc_url($payment_details_page)) . '</span>';
+
+            }
             ?>
             <p class="form-field form-field-wide">
                 <br />
                 <h4><?php echo __('COINQVEST Payment Details', 'coinqvest');?></h4>
-                <p>
-                    <?php
-                    echo  __('Checkout Id', 'coinqvest') . ': ' . esc_html($cq_checkout_id);
-                    if ($cq_payment_id) {
-                        echo '<br>' . __('Payment Id', 'coinqvest') . ': ' . esc_html($cq_payment_id);
-                        echo '<br>' . __('View payment details ', 'coinqvest') . ' <a href="' . esc_attr('https://www.coinqvest.com/en/payment/' . $cq_payment_id) . '" target="_blank">' . __('here', 'coinqvest') . '</a>';
-                    }
-                    ?>
-                </p>
+                <p><?php echo __('Checkout Id', 'coinqvest') . ': ' . esc_html($cq_checkout_id);?> </p>
+                <p><?php echo $display_info;?> </p>
             </p>
             <?php
         }
