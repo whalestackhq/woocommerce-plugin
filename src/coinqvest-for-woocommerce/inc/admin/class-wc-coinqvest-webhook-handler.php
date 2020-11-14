@@ -31,32 +31,35 @@ class WC_Coinqvest_Webhook_Handler {
 		$payload = file_get_contents('php://input');
 		$request_headers = array_change_key_case($this->get_request_headers(), CASE_UPPER);
 
-		if (!empty($payload) && $this->validate_webhook($request_headers, $payload)) {
+        if (empty($payload) || !$this->validate_webhook($request_headers, $payload)) {
+            CQ_Logging_Service::write('Incoming webhook failed validation: ' . print_r( $payload, true));
+            status_header(401);
+            exit;
+        }
 
-			$payload_decoded = json_decode($payload, true);
+        $payload_decoded = json_decode($payload, true);
 
-			$orders = wc_get_orders(array('_coinqvest_checkout_id' => $payload_decoded['checkoutId']));
+        if (!isset($payload_decoded['eventType'])) {
+            status_header(400);
+            exit;
+        }
 
-			if (empty($orders)) {
-				exit;
-			}
+        $orders = wc_get_orders(array(
+            '_coinqvest_checkout_id' => $payload_decoded['data']['checkout']['id']
+        ));
 
-			$order = new \WC_Order($orders[0]);
-			$this->_update_order_status($order, $payload_decoded);
+        if (empty($orders)) {
+            status_header(404);
+            exit;
+        }
 
-			status_header(200);
-			exit;
+        $order = new \WC_Order($orders[0]);
+        $this->_update_order_status($order, $payload_decoded);
 
-		} else {
+        status_header(200);
+        exit;
 
-//            CQ_Logging_Service::write('Incoming webhook failed validation: ' . print_r( $payload, true));
 
-            $logger = wc_get_logger();
-            $logger->debug('Incoming webhook failed validation: ' . print_r( $payload, true), array( 'source' => 'coinqvest'));
-
-			status_header(400);
-			exit;
-		}
 	}
 
 	/**
@@ -126,9 +129,6 @@ class WC_Coinqvest_Webhook_Handler {
 	 */
 	public function _update_order_status($order, $payload) {
 
-        $logger = wc_get_logger();
-        $logger->debug(print_r($payload, true), array( 'source' => 'coinqvest'));
-
         $woo_order_id = $order->get_id();
         $woo_order_state = $order->get_status();
 
@@ -136,58 +136,54 @@ class WC_Coinqvest_Webhook_Handler {
 			return;
 		}
 
-        if (isset($payload['eventType'])) {
+        $cq_payload_state = $payload['eventType'];
+        $checkout = $payload['data']['checkout'];
 
-            $cq_payload_state = $payload['eventType'];
-            $checkout = $payload['data']['checkout'];
+        if ($cq_payload_state == 'CHECKOUT_COMPLETED') {
 
-            if ($cq_payload_state == 'CHECKOUT_COMPLETED') {
+            if (in_array($woo_order_state, array('on-hold', 'pending', 'canceled'))) {
 
-                if (in_array($woo_order_state, array('on-hold', 'pending', 'canceled'))) {
+                $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $checkout['id'];
 
-                    $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $checkout['id'];
-
-                    $order->update_status('processing');
-                    $order->add_order_note('<span style="color:#079047">' . sprintf(__('COINQVEST payment was successfully processed. Find payment details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>');
-                    $order->payment_complete();
-
-                }
-
-            } else if ($cq_payload_state == 'CHECKOUT_UNDERPAID') {
-
-                if (in_array($woo_order_state, array('on-hold', 'pending', 'canceled'))) {
-
-                    $payment_details_page = 'https://www.coinqvest.com/en/unresolved-charge/checkout-id/' . $checkout['id'];
-
-                    $order->update_status('on-hold');
-                    $order->add_order_note('<span style="color:#cc292f">' . sprintf(__('COINQVEST payment was underpaid by customer. See details and options to resolve it <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>');
-
-                }
-
-            } else if ($cq_payload_state == 'UNDERPAID_ACCEPTED') {
-
-                if (in_array($woo_order_state, array('on-hold', 'pending', 'canceled'))) {
-
-                    $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $checkout['id'];
-                    $underpaid_accepted_price = $checkout['settlementAmountReceived'] . ' ' . $order->get_currency();
-
-                    $order->update_status('processing');
-                    $order->add_order_note('<span style="color:#079047">' . sprintf(__('Underpaid by customer, but payment manually accepted at %1$s and completed. Find payment details <a href="%2$s" target="_blank">here</a>.', 'coinqvest'), esc_attr($underpaid_accepted_price), esc_url($payment_details_page)) . '</span>');
-                    $order->payment_complete();
-                    $order->update_meta_data('_coinqvest_underpaid_accepted_price', esc_attr($underpaid_accepted_price));
-
-                }
-
-            } else {
-
-                $logger->debug('Unresolved payload event for order id ' . $woo_order_id . print_r($payload, true), array( 'source' => 'coinqvest'));
+                $order->update_status('processing');
+                $order->add_order_note('<span style="color:#079047">' . sprintf(__('COINQVEST payment was successfully processed. Find payment details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>');
+                $order->payment_complete();
 
             }
 
-            $order->update_meta_data('_coinqvest_payment_state', esc_attr($cq_payload_state));
-            $order->save();
+        } else if ($cq_payload_state == 'CHECKOUT_UNDERPAID') {
+
+            if (in_array($woo_order_state, array('on-hold', 'pending', 'canceled'))) {
+
+                $payment_details_page = 'https://www.coinqvest.com/en/unresolved-charge/checkout-id/' . $checkout['id'];
+
+                $order->update_status('on-hold');
+                $order->add_order_note('<span style="color:#cc292f">' . sprintf(__('COINQVEST payment was underpaid by customer. See details and options to resolve it <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>');
+
+            }
+
+        } else if ($cq_payload_state == 'UNDERPAID_ACCEPTED') {
+
+            if (in_array($woo_order_state, array('on-hold', 'pending', 'canceled'))) {
+
+                $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $checkout['id'];
+                $underpaid_accepted_price = $checkout['settlementAmountReceived'] . ' ' . $order->get_currency();
+
+                $order->update_status('processing');
+                $order->add_order_note('<span style="color:#079047">' . sprintf(__('Underpaid by customer, but payment manually accepted at %1$s and completed. Find payment details <a href="%2$s" target="_blank">here</a>.', 'coinqvest'), esc_attr($underpaid_accepted_price), esc_url($payment_details_page)) . '</span>');
+                $order->payment_complete();
+                $order->update_meta_data('_coinqvest_underpaid_accepted_price', esc_attr($underpaid_accepted_price));
+
+            }
+
+        } else {
+
+            CQ_Logging_Service::write('Unresolved payload event for order id ' . $woo_order_id . print_r( $payload, true));
 
         }
+
+        $order->update_meta_data('_coinqvest_payment_state', esc_attr($cq_payload_state));
+        $order->save();
 
 	}
 

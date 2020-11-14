@@ -155,34 +155,36 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
             }
         }
 
-        if ($cq_checkout_id) {
-
-            if ($cq_payment_state == 'CHECKOUT_COMPLETED') {
-
-                $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $cq_checkout_id;
-                $display_info = '<span style="color: #079047">' . sprintf(__('Payment was successfully completed. Find payment details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>';
-
-            } else if ($cq_payment_state == 'CHECKOUT_UNDERPAID') {
-
-                $payment_details_page = 'https://www.coinqvest.com/en/unresolved-charge/checkout-id/' . $cq_checkout_id;
-                $display_info = '<span style="color: #cc292f">' . sprintf(__('Action required: Payment was underpaid by customer. Go to the payment details page to resolve it <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>';
-
-
-            } else if ($cq_payment_state == 'UNDERPAID_ACCEPTED') {
-
-                $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $cq_checkout_id;
-                $display_info = '<span style="color: #079047">' . sprintf(__('This checkout was originally billed at %1$s but underpaid by your customer and manually accepted at %2$s. Find payment details <a href="%3$s" target="_blank">here</a>.', 'coinqvest'), esc_attr($order->get_total() . ' ' . $order->get_currency()), esc_attr($cq_underpaid_accepted_price), esc_url($payment_details_page)) . '</span>';
-
-            }
-            ?>
-            <p class="form-field form-field-wide">
-                <br />
-                <h4><?php echo __('COINQVEST Payment Details', 'coinqvest');?></h4>
-                <p><?php echo __('Checkout Id', 'coinqvest') . ': ' . esc_html($cq_checkout_id);?> </p>
-                <p><?php echo $display_info;?> </p>
-            </p>
-            <?php
+        if (is_null($cq_checkout_id)) {
+            exit;
         }
+
+        if ($cq_payment_state == 'CHECKOUT_COMPLETED') {
+
+            $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $cq_checkout_id;
+            $display_info = '<span style="color: #079047">' . sprintf(__('Payment was successfully completed. Find payment details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>';
+
+        } else if ($cq_payment_state == 'CHECKOUT_UNDERPAID') {
+
+            $payment_details_page = 'https://www.coinqvest.com/en/unresolved-charge/checkout-id/' . $cq_checkout_id;
+            $display_info = '<span style="color: #cc292f">' . sprintf(__('Action required: Payment was underpaid by customer. Go to the payment details page to resolve it <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>';
+
+
+        } else if ($cq_payment_state == 'UNDERPAID_ACCEPTED') {
+
+            $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $cq_checkout_id;
+            $display_info = '<span style="color: #079047">' . sprintf(__('This checkout was originally billed at %1$s but underpaid by your customer and manually accepted at %2$s. Find payment details <a href="%3$s" target="_blank">here</a>.', 'coinqvest'), esc_attr($order->get_total() . ' ' . $order->get_currency()), esc_attr($cq_underpaid_accepted_price), esc_url($payment_details_page)) . '</span>';
+
+        }
+        ?>
+        <p class="form-field form-field-wide">
+            <br />
+            <h4><?php echo __('COINQVEST Payment Details', 'coinqvest');?></h4>
+            <p><?php echo __('Checkout Id', 'coinqvest') . ': ' . esc_html($cq_checkout_id);?> </p>
+            <p><?php echo $display_info;?> </p>
+        </p>
+        <?php
+
     }
 
     public function payment_scripts() {
