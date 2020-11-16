@@ -7,7 +7,7 @@ This WooCommerce plugin implements the PHP REST API documented at https://www.co
 Key Features
 ------------
 * Accepts Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Stellar Lumens (XLM) and Litecoin (LTC) payments from customers.
-* Instantly settles in your preferred national currency (USD, EUR, CAD, NGN, BRL).
+* Instantly settles in your preferred national currency (USD, EUR, NGN, BRL).
 * Integrates seemlessly into WooCommerce
 * Sets the product price in your national currency.
 * Eliminates chargebacks and gives you control over refunds.
