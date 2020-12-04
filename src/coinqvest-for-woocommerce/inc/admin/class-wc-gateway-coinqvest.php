@@ -140,6 +140,7 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
         $cq_checkout_id = null;
         $cq_payment_state = null;
         $cq_underpaid_accepted_price = null;
+        $cq_refund_id = null;
         $display_info = null;
         $meta_data = $order->get_meta_data();
 
@@ -153,29 +154,43 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
             if ($item->key == '_coinqvest_underpaid_accepted_price') {
                 $cq_underpaid_accepted_price = $item->value;
             }
+            if ($item->key == '_coinqvest_refund_id') {
+                $cq_refund_id = $item->value;
+            }
         }
 
         if (is_null($cq_checkout_id)) {
             exit;
         }
 
-        if ($cq_payment_state == 'CHECKOUT_COMPLETED') {
+        switch ($cq_payment_state) {
 
-            $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $cq_checkout_id;
-            $display_info = '<span style="color: #079047">' . sprintf(__('Payment was successfully completed. Find payment details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>';
+            case 'CHECKOUT_COMPLETED':
 
-        } else if ($cq_payment_state == 'CHECKOUT_UNDERPAID') {
+                $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $cq_checkout_id;
+                $display_info = '<span style="color: #079047">' . sprintf(__('Payment was successfully completed. Find payment details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>';
+                break;
 
-            $payment_details_page = 'https://www.coinqvest.com/en/unresolved-charge/checkout-id/' . $cq_checkout_id;
-            $display_info = '<span style="color: #cc292f">' . sprintf(__('Action required: Payment was underpaid by customer. Go to the payment details page to resolve it <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>';
+            case 'CHECKOUT_UNDERPAID':
 
+                $payment_details_page = 'https://www.coinqvest.com/en/unresolved-charge/checkout-id/' . $cq_checkout_id;
+                $display_info = '<span style="color: #cc292f">' . sprintf(__('Action required: Payment was underpaid by customer. Go to the payment details page to resolve it <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>';
+                break;
 
-        } else if ($cq_payment_state == 'UNDERPAID_ACCEPTED') {
+            case 'UNDERPAID_ACCEPTED':
 
-            $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $cq_checkout_id;
-            $display_info = '<span style="color: #079047">' . sprintf(__('This checkout was originally billed at %1$s but underpaid by your customer and manually accepted at %2$s. Find payment details <a href="%3$s" target="_blank">here</a>.', 'coinqvest'), esc_attr($order->get_total() . ' ' . $order->get_currency()), esc_attr($cq_underpaid_accepted_price), esc_url($payment_details_page)) . '</span>';
+                $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $cq_checkout_id;
+                $display_info = '<span style="color: #079047">' . sprintf(__('This checkout was originally billed at %1$s but underpaid by your customer and manually accepted at %2$s. Find payment details <a href="%3$s" target="_blank">here</a>.', 'coinqvest'), esc_attr($order->get_total() . ' ' . $order->get_currency()), esc_attr($cq_underpaid_accepted_price), esc_url($payment_details_page)) . '</span>';
+                break;
+
+            case 'REFUND_COMPLETED':
+
+                $payment_details_page = 'https://www.coinqvest.com/en/refund/' . $cq_refund_id;
+                $display_info = '<span style="color: #007cba">' . sprintf(__('This order was refunded. Find refund details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>';
+                break;
 
         }
+
         ?>
         <p class="form-field form-field-wide">
             <br />

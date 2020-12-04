@@ -74,7 +74,7 @@ Do you have questions or issues with COINQVEST? Feel free to contact us anytime!
 
 = 0.0.5 =
 
-* Added payment state management for underpaid and completed payments
+* Added payment state handling for underpaid payments, completed payments and refunds
 
 = 0.0.4 =
 
