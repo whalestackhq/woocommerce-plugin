@@ -181,7 +181,7 @@ class WC_Coinqvest_Webhook_Handler {
                 $refund = $payload['data']['refund'];
                 $context = $payload['data']['refund']['context'];
 
-                if (in_array($context, array('CHECKOUT_COMPLETE', 'UNDERPAID_CHECKOUT'))) {
+                if (in_array($context, array('COMPLETED_CHECKOUT', 'UNDERPAID_CHECKOUT'))) {
                     $payment_details_page = 'https://www.coinqvest.com/en/refund/' . $refund['id'];
                     $order->update_status('refunded');
                     $order->add_order_note('<span style="color:#007cba;">' . sprintf(__('Order amount was refunded successfully to customer. See details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>');
