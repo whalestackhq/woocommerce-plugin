@@ -3,12 +3,12 @@ Contributors: coinqvest
 Tags: woocommerce, crypto, cryptocurrency, payments, payment gateway, payment processing, digital currencies, bitcoin, stellar, lumens, xlm, btc, eth, xrp, ltc, EUR, USD, NGN, BRL
 Requires at least: 3.9
 Tested up to: 5.6
-Stable tag: 0.1
+Stable tag: 1.0
 Requires PHP: 5.6
 License: Apache 2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
-Accept digital currencies from your clients and settle instantly in your preferred national payout currency (USD, EUR, BRL, NGN).
+Accept digital currencies from your clients and settle instantly in your preferred national payout currency (USD, EUR, BRL, NGN) or cryptocurrencies like Bitcoin.
 
 == Description ==
 
@@ -17,7 +17,7 @@ COINQVEST provides digital currency checkouts that automatically go from Bitcoin
 = Key features =
 
 * Accepts Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Stellar Lumens (XLM) and Litecoin (LTC) payments from customers.
-* Instantly settles in your preferred national currency (USD, EUR, NGN, BRL).
+* Instantly settles in your preferred national currency (USD, EUR, NGN, BRL) or cryptocurrency (BTC, ETH, LTC, XLM, XRP).
 * Integrates seemlessly into WooCommerce
 * Sets the product price in your national currency.
 * Automatically generates invoices.
@@ -72,7 +72,12 @@ Do you have questions or issues with COINQVEST? Feel free to contact us anytime!
 
 == Changelog ==
 
-= 0.0.6 =
+= 1.0.7 =
+
+* Added cryptocurrencies as settlement currencies
+* Added a 'What is COINQVEST?' link in the payment method description
+
+= 1.0.6 =
 
 * Bugfix in the refunds webhook
 
