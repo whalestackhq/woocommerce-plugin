@@ -12,7 +12,7 @@ class WC_Coinqvest_Admin_Form {
 
 	public function form_fields($api_key, $api_secret) {
 
-		$fiat_currencies = array(
+		$currencies = array(
 			'0' => 'Select currency ...'
 		);
 
@@ -36,9 +36,24 @@ class WC_Coinqvest_Admin_Form {
 
                     foreach ($fiats->fiatCurrencies as $currency) {
 
-                        $fiat_currencies[$currency->assetCode] = esc_html($currency->assetCode) . ' - ' . esc_html($currency->assetName);
+                        $currencies[$currency->assetCode] = esc_html($currency->assetCode) . ' - ' . esc_html($currency->assetName);
 
                     }
+
+                }
+
+                $response = $client->get('/blockchains');
+
+                if ($response->httpStatusCode == 200) {
+
+                    $chains = json_decode($response->responseBody);
+
+                    foreach ($chains->blockchains as $blockchain) {
+
+                        $currencies[$blockchain->nativeAssetCode] = esc_html($blockchain->nativeAssetCode) . ' - ' . esc_html($blockchain->nativeAssetName);
+
+                    }
+
                 }
             }
 
@@ -79,7 +94,7 @@ class WC_Coinqvest_Admin_Form {
 				'title' => __('Settlement Currency', 'coinqvest'),
 				'type' => 'select',
 				'description' => __('The currency that the crypto payments get converted to. If you don\'t choose a currency here, the settlement currency will be the billing currency. API credentials must be provided before currency options show up.', 'coinqvest'),
-				'options' => $fiat_currencies,
+				'options' => $currencies,
 				'default' => 'default',
 				'desc_tip' => true,
 			),

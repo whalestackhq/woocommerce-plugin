@@ -23,11 +23,11 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 		$this->has_fields = false;
 		$this->order_button_text  = __('Proceed to COINQVEST', 'coinqvest');
 		$this->method_title = 'COINQVEST';
-        $this->method_description = sprintf( __('Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, NGN, BRL). <a href="%1$s" target="_blank">Sign up</a> for a COINQVEST merchant account and <a href="%2$s" target="_blank">get your API credentials</a>.', 'coinqvest'), 'https://www.coinqvest.com?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']), 'https://www.coinqvest.com/en/api-settings?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']));
+        $this->method_description = sprintf( __('Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, NGN, BRL) or digital currencies like Bitcoin. <a href="%1$s" target="_blank">Sign up</a> for a COINQVEST merchant account and <a href="%2$s" target="_blank">get your API credentials</a>.', 'coinqvest'), 'https://www.coinqvest.com?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']), 'https://www.coinqvest.com/en/api-settings?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']));
 
         // Define user set variables.
 		$this->title = $this->get_option('title');
-		$this->description = $this->get_option('description');
+		$this->description = $this->get_option('description') . '<br /><a href="https://www.coinqvest.com/en/features" target="_blank" style="font-size: .83em">' . __('What is COINQVEST?') . '</a>';
 		$this->api_key = $this->get_option('api_key');
 		$this->api_secret = $this->get_option('api_secret');
 		$this->debug = 'yes' === $this->get_option('debug', 'no');

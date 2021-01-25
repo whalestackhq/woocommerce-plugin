@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: COINQVEST for WooCommerce v0.0.1\n"
-"POT-Creation-Date: 2020-12-05 12:29+0100\n"
+"POT-Creation-Date: 2021-01-25 17:16+0100\n"
 "PO-Revision-Date: 2020-05-23 10:41+0200\n"
 "Last-Translator: \n"
 "Language-Team: COINQVEST www.coinqvest.com\n"
@@ -17,81 +17,81 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: class-wc-coinqvest-admin-form.php:49
+#: class-wc-coinqvest-admin-form.php:64
 msgid "Enable/Disable"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:51
+#: class-wc-coinqvest-admin-form.php:66
 msgid "Enable COINQVEST Payments"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:55
+#: class-wc-coinqvest-admin-form.php:70
 msgid "Title"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:57
+#: class-wc-coinqvest-admin-form.php:72
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:58
+#: class-wc-coinqvest-admin-form.php:73
 msgid "Bitcoin and other cryptocurrencies"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:62
+#: class-wc-coinqvest-admin-form.php:77
 msgid "Description"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:65
+#: class-wc-coinqvest-admin-form.php:80
 msgid "This controls the description which the user sees during checkout."
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:66
+#: class-wc-coinqvest-admin-form.php:81
 msgid "Pay with BTC, ETH, XRP, XLM, LTC"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:69
+#: class-wc-coinqvest-admin-form.php:84
 msgid "API Key"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:71
+#: class-wc-coinqvest-admin-form.php:86
 #, php-format
 msgid "Get your API Key from the COINQVEST Settings page, available %s."
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:74
+#: class-wc-coinqvest-admin-form.php:89
 msgid "API Secret"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:76
+#: class-wc-coinqvest-admin-form.php:91
 #, php-format
 msgid "Get your API Secret from the COINQVEST Settings page, available %s."
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:79
+#: class-wc-coinqvest-admin-form.php:94
 msgid "Settlement Currency"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:81
+#: class-wc-coinqvest-admin-form.php:96
 msgid "The currency that the crypto payments get converted to. If you don't choose a currency here, the settlement currency will be the billing currency. API credentials must be provided before currency options show up."
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:87
+#: class-wc-coinqvest-admin-form.php:102
 msgid "Show logo"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:89
+#: class-wc-coinqvest-admin-form.php:104
 msgid "Display COINQVEST logo on checkout page."
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:93
+#: class-wc-coinqvest-admin-form.php:108
 msgid "Debug log"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:95
+#: class-wc-coinqvest-admin-form.php:110
 msgid "Enable logging"
 msgstr ""
 
-#: class-wc-coinqvest-admin-form.php:97
+#: class-wc-coinqvest-admin-form.php:112
 #, php-format
 msgid "Log COINQVEST API events inside %s"
 msgstr ""
@@ -130,7 +130,11 @@ msgstr ""
 
 #: class-wc-gateway-coinqvest.php:26
 #, php-format
-msgid "Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, NGN, BRL). <a href=\"%1$s\" target=\"_blank\">Sign up</a> for a COINQVEST merchant account and <a href=\"%2$s\" target=\"_blank\">get your API credentials</a>."
+msgid "Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, NGN, BRL) or digital currencies like Bitcoin. <a href=\"%1$s\" target=\"_blank\">Sign up</a> for a COINQVEST merchant account and <a href=\"%2$s\" target=\"_blank\">get your API credentials</a>."
+msgstr ""
+
+#: class-wc-gateway-coinqvest.php:30
+msgid "What is COINQVEST?"
 msgstr ""
 
 #: class-wc-gateway-coinqvest.php:64
