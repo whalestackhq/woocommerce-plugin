@@ -20,6 +20,7 @@ COINQVEST provides digital currency checkouts that automatically go from Bitcoin
 * Instantly settles in your preferred national currency (USD, EUR, NGN, BRL) or cryptocurrency (BTC, ETH, LTC, XLM, XRP).
 * Integrates seemlessly into WooCommerce
 * Sets the product price in your national currency.
+* Sets the checkout page language in your preferred language.
 * Automatically generates invoices.
 * Eliminates chargebacks and gives you control over refunds.
 * Eliminates currency volatility risks due to instant conversions and settlement.
@@ -71,6 +72,10 @@ Do you have questions or issues with COINQVEST? Feel free to contact us anytime!
 4. COINQVEST Instant Withdrawals
 
 == Changelog ==
+
+= 1.0.8 =
+
+* Added language selector for checkout page
 
 = 1.0.7 =
 
