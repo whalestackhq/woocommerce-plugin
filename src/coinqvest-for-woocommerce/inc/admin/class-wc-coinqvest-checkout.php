@@ -155,6 +155,12 @@ class WC_Coinqvest_Checkout {
 			$checkout['settlementCurrency'] = $settlement_currency;
 		}
 
+        $checkout_language = $options['checkout_language'];
+
+        if (isset($checkout_language) && $checkout_language != "0") {
+            $checkout['checkoutLanguage'] = $checkout_language;
+        }
+
 		$checkout['webhook'] = $this->get_webhook_url();
 
 		$checkout['links']['returnUrl'] = $this->get_return_url($order);

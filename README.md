@@ -10,6 +10,7 @@ Key Features
 * Instantly settles in your preferred national currency (USD, EUR, NGN, BRL) or cryptocurrency (BTC, ETH, LTC, XLM, XRP).
 * Integrates seemlessly into WooCommerce
 * Sets the product price in your national currency.
+* Sets the checkout page language in your preferred language.
 * Eliminates chargebacks and gives you control over refunds.
 * Eliminates currency volatility risks due to instant conversions and settlement.
 * Translates the plugin into any required language.

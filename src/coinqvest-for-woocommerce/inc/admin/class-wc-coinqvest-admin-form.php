@@ -16,6 +16,12 @@ class WC_Coinqvest_Admin_Form {
 			'0' => 'Select currency ...'
 		);
 
+		$languages = array(
+		    '0' => 'Select language ...',
+            'auto' => 'auto - Automatic'
+        );
+
+
         $parts = parse_url($_SERVER['REQUEST_URI']);
 
         if (isset($parts['query']) && $parts['query'] == 'page=wc-settings&tab=checkout&section=wc_coinqvest') {
@@ -55,6 +61,23 @@ class WC_Coinqvest_Admin_Form {
                     }
 
                 }
+
+                /**
+                 * Get checkout page languages
+                 */
+
+                $response = $client->get('/languages');
+
+                if ($response->httpStatusCode == 200) {
+
+                    $langs = json_decode($response->responseBody);
+
+                    foreach ($langs->languages as $lang) {
+                        $languages[$lang->languageCode] = esc_html($lang->languageCode) . ' - ' . esc_html($lang->name);
+                    }
+
+                }
+
             }
 
         }
@@ -98,6 +121,14 @@ class WC_Coinqvest_Admin_Form {
 				'default' => 'default',
 				'desc_tip' => true,
 			),
+            'checkout_language' => array(
+                'title' => __('Checkout Language', 'coinqvest'),
+                'type' => 'select',
+                'description' => __('The language that your checkout page will display in. Choose \'auto\' to automatically detect the customer\'s main browser language. Fallback language code is \'en\'.', 'coinqvest'),
+                'options' => $languages,
+                'default' => 'default',
+                'desc_tip' => true,
+            ),
 			'show_icons' => array(
 				'title' => __('Show logo', 'coinqvest'),
 				'type' => 'checkbox',
