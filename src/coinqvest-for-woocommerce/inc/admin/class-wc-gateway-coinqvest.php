@@ -161,7 +161,7 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
         }
 
         if (is_null($cq_checkout_id)) {
-            exit;
+            return;
         }
 
         switch ($cq_payment_state) {
