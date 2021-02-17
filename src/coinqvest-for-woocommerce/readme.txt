@@ -73,6 +73,10 @@ Do you have questions or issues with COINQVEST? Feel free to contact us anytime!
 
 == Changelog ==
 
+= 1.0.9 =
+
+* Updated payment information display on order detail page
+
 = 1.0.8 =
 
 * Added language selector for checkout page
