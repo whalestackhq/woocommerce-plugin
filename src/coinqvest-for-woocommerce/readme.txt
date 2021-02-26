@@ -73,6 +73,10 @@ Do you have questions or issues with COINQVEST? Feel free to contact us anytime!
 
 == Changelog ==
 
+= 1.0.10 =
+
+* Improved billing data checks on checkout page
+
 = 1.0.9 =
 
 * Updated payment information display on order detail page

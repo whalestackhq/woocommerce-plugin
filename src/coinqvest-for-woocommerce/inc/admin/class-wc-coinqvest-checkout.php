@@ -30,15 +30,15 @@ class WC_Coinqvest_Checkout {
 
 		$customer = array(
 			'email' => sanitize_email($order->get_billing_email()),
-			'firstname' => sanitize_text_field($order->get_billing_first_name()),
-			'lastname' => sanitize_text_field($order->get_billing_last_name()),
-			'company' => sanitize_text_field($order->get_billing_company()),
-			'adr1' => sanitize_text_field($order->get_billing_address_1()),
-			'adr2' => sanitize_text_field($order->get_billing_address_2()),
-			'zip' => sanitize_text_field($order->get_billing_postcode()),
-			'city' => sanitize_text_field($order->get_billing_city()),
-			'countrycode' => sanitize_text_field($order->get_billing_country()),
-			'phonenumber' => sanitize_text_field($order->get_billing_phone()),
+			'firstname' => !empty($order->get_billing_first_name()) ? sanitize_text_field($order->get_billing_first_name()) : null,
+			'lastname' => !empty($order->get_billing_last_name()) ? sanitize_text_field($order->get_billing_last_name()) : null,
+			'company' => !empty($order->get_billing_company()) ? sanitize_text_field($order->get_billing_company()) : null,
+			'adr1' => !empty($order->get_billing_address_1()) ? sanitize_text_field($order->get_billing_address_1()) : null,
+			'adr2' => !empty($order->get_billing_address_2()) ? sanitize_text_field($order->get_billing_address_2()) : null,
+			'zip' => !empty($order->get_billing_postcode()) ? sanitize_text_field($order->get_billing_postcode()) : null,
+			'city' => !empty($order->get_billing_city()) ? sanitize_text_field($order->get_billing_city()) : null,
+			'countrycode' => !empty($order->get_billing_country()) ? sanitize_text_field($order->get_billing_country()) : null,
+			'phonenumber' => !empty($order->get_billing_phone()) ? sanitize_text_field($order->get_billing_phone()) : null,
 			'meta' => array(
 				'source' => 'Woocommerce'
 			)
