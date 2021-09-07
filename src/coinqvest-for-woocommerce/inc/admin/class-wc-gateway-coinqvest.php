@@ -57,7 +57,7 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
     /**
      * Settings form fields input validation
      */
-    public function validate_api_key_field( $key, $value ) {
+    public function validate_api_key_field($key, $value) {
 
         $value = sanitize_text_field($value);
         if (!empty($value) && strlen($value) != 12) {
@@ -66,11 +66,26 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
         return $value;
     }
 
-    public function validate_api_secret_field( $key, $value ) {
+    public function validate_api_secret_field($key, $value) {
 
         $value = sanitize_text_field($value);
         if (!empty($value) && strlen($value) != 29) {
             \WC_Admin_Settings::add_error(esc_html(__('API Secret seems to be wrong. Please double check.', 'coinqvest')));
+        }
+        return $value;
+    }
+
+    public function validate_settlement_currency_field($key, $value) {
+
+        $value = sanitize_text_field($value);
+        if (empty($value)) {
+            $shopCurrency = get_woocommerce_currency();
+            $client = new Api\CQ_Merchant_Client($this->api_key, $this->api_secret, true);
+            $fiats = new WC_Coinqvest_Helpers();
+            $fiats = $fiats->get_fiat_currencies($client);
+            if (!array_key_exists($shopCurrency, $fiats)) {
+                \WC_Admin_Settings::add_error(esc_html(__($shopCurrency . ' Please select a settlement currency.', 'coinqvest')));
+            }
         }
         return $value;
     }
