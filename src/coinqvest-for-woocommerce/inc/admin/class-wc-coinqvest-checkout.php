@@ -56,18 +56,18 @@ class WC_Coinqvest_Checkout {
          * If not, the settlement currency will then be used as the new billing currency
          */
 
-        $baseCurrency = $order->get_currency();
+        $quoteCurrency = $order->get_currency();
         $exchangeRate = null;
 
-        $isFiat = $helpers->isFiat($client, $baseCurrency);
-        $isBlockchain = $helpers->isBlockchain($client, $baseCurrency);
+        $isFiat = $helpers->isFiat($client, $quoteCurrency);
+        $isBlockchain = $helpers->isBlockchain($client, $quoteCurrency);
 
         if (!$isFiat && !$isBlockchain) {
 
             $settlement_currency = $options['settlement_currency'];
 
             if (!isset($settlement_currency) || $settlement_currency == "0") {
-                wc_add_notice(esc_html(__('Please define a settlement currency.', 'coinqvest'), 'error'));
+                wc_add_notice(esc_html(__('Please define a settlement currency in the COINQVEST payment plugin.', 'coinqvest'), 'error'));
                 return array('result' => 'error');
             }
 
@@ -76,9 +76,10 @@ class WC_Coinqvest_Checkout {
              */
 
             $pair = array(
-                'baseCurrency' => $baseCurrency,
-                'quoteCurrency' => $settlement_currency
+                'quoteCurrency' => $quoteCurrency,
+                'baseCurrency' => $settlement_currency
             );
+
             $response = $client->get('/exchange-rate-global', $pair);
             if ($response->httpStatusCode != 200) {
                 wc_add_notice(esc_html(__('Exchange rate not available. Please try again.', 'coinqvest'), 'error'));
@@ -93,7 +94,8 @@ class WC_Coinqvest_Checkout {
                 return array('result' => 'error');
             }
 
-            $baseCurrency = $settlement_currency;
+            // set the new billing currency accordingly
+            $quoteCurrency = $settlement_currency;
 
         }
 
@@ -167,7 +169,7 @@ class WC_Coinqvest_Checkout {
 
 			"charge" => array(
 				"customerId" => $customer_id,
-				"currency" => $baseCurrency,
+				"currency" => $quoteCurrency,
 				"lineItems" => $lineItems,
 				"discountItems" => !empty($discountItems) ? $discountItems : null,
 				"shippingCostItems" => !empty($shippingCostItems) ? $shippingCostItems : null,
@@ -175,32 +177,10 @@ class WC_Coinqvest_Checkout {
 			)
 		);
 
-        /**
-         * Override the charge object with new exchange rate values
-         * Add a charge item that describes the use of the currency exchange rate
-         */
-
-		if (!is_null($exchangeRate)) {
-
-		    $helpers->overrideCheckoutValues($checkout, $exchangeRate);
-
-            $newLineItem = array(
-                'description' => esc_html(sprintf(__('Currency Exchange %1s/%2s at Rate %3s', 'coinqvest'), $checkout['settlementCurrency'], $baseCurrency, $exchangeRate)),
-                'netAmount' => 0
-            );
-            if (isset($checkout['charge']['shippingCostItems'])) {
-                array_push($checkout['charge']['shippingCostItems'], $newLineItem);
-            } else {
-                $checkout['charge']['shippingCostItems'][] = $newLineItem;
-            }
-
-        }
-
-//		$settlement_currency = $options['settlement_currency'];
-//
-//		if (isset($settlement_currency) && $settlement_currency != "0") {
-//			$checkout['settlementCurrency'] = $settlement_currency;
-//		}
+		$settlement_currency = $options['settlement_currency'];
+		if (isset($settlement_currency) && $settlement_currency != "0") {
+			$checkout['settlementCurrency'] = $settlement_currency;
+		}
 
         $checkout_language = $options['checkout_language'];
         if (isset($checkout_language) && $checkout_language != "0") {
@@ -210,6 +190,27 @@ class WC_Coinqvest_Checkout {
 		$checkout['webhook'] = $this->get_webhook_url();
 		$checkout['links']['returnUrl'] = $this->get_return_url($order);
 		$checkout['links']['cancelUrl'] = $this->get_cancel_url($order);
+
+        /**
+         * Override the charge object with new exchange rate values
+         * Add a charge item that describes the use of the currency exchange rate
+         */
+
+        if (!is_null($exchangeRate)) {
+
+            $checkout = $helpers->overrideCheckoutValues($checkout, $exchangeRate);
+
+            $newLineItem = array(
+                'description' => esc_html(sprintf(__('Exchange Rate 1 %1s = %2s %3s', 'coinqvest'), $order->get_currency(), $helpers->numberFormat(1/$exchangeRate, 7), $quoteCurrency)),
+                'netAmount' => 0
+            );
+            if (isset($checkout['charge']['shippingCostItems'])) {
+                array_push($checkout['charge']['shippingCostItems'], $newLineItem);
+            } else {
+                $checkout['charge']['shippingCostItems'][] = $newLineItem;
+            }
+
+        }
 
         /**
          * Post the checkout
