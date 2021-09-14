@@ -23,7 +23,7 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 		$this->has_fields = false;
 		$this->order_button_text  = __('Proceed to COINQVEST', 'coinqvest');
 		$this->method_title = 'COINQVEST';
-        $this->method_description = sprintf( __('Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, NGN, BRL) or digital currencies like Bitcoin. <a href="%1$s" target="_blank">Sign up</a> for a COINQVEST merchant account and <a href="%2$s" target="_blank">get your API credentials</a>.', 'coinqvest'), 'https://www.coinqvest.com?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']), 'https://www.coinqvest.com/en/api-settings?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']));
+        $this->method_description = sprintf( __('Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, ARS, BRL, NGN) or digital currencies like Bitcoin. <a href="%1$s" target="_blank">Sign up</a> for a COINQVEST merchant account and <a href="%2$s" target="_blank">get your API credentials</a>.', 'coinqvest'), 'https://www.coinqvest.com?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']), 'https://www.coinqvest.com/en/api-settings?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']));
 
         // Define user set variables.
 		$this->title = $this->get_option('title');
@@ -57,20 +57,47 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
     /**
      * Settings form fields input validation
      */
-    public function validate_api_key_field( $key, $value ) {
+    public function validate_api_key_field($key, $value) {
 
         $value = sanitize_text_field($value);
+
+        if ($value == '') {
+            \WC_Admin_Settings::add_error(esc_html(__('Please enter your API key.', 'coinqvest')));
+        }
         if (!empty($value) && strlen($value) != 12) {
             \WC_Admin_Settings::add_error(esc_html(__('API Key seems to be wrong. Please double check.', 'coinqvest')));
         }
         return $value;
     }
 
-    public function validate_api_secret_field( $key, $value ) {
+    public function validate_api_secret_field($key, $value) {
 
         $value = sanitize_text_field($value);
+
+        if ($value == '') {
+            \WC_Admin_Settings::add_error(esc_html(__('Please enter your API secret.', 'coinqvest')));
+        }
         if (!empty($value) && strlen($value) != 29) {
             \WC_Admin_Settings::add_error(esc_html(__('API Secret seems to be wrong. Please double check.', 'coinqvest')));
+        }
+        return $value;
+    }
+
+    public function validate_settlement_currency_field($key, $value) {
+
+        if ($this->api_key == '' && $this->api_secret == '') {
+            return $value;
+        }
+
+        $value = sanitize_text_field($value);
+        if (empty($value)) {
+            $shopCurrency = get_woocommerce_currency();
+            $client = new Api\CQ_Merchant_Client($this->api_key, $this->api_secret, true);
+            $fiats = new WC_Coinqvest_Helpers();
+            $fiats = $fiats->get_fiat_currencies($client);
+            if (!array_key_exists($shopCurrency, $fiats)) {
+                \WC_Admin_Settings::add_error(esc_html(__(' Please select a settlement currency. Reload this page to see available settlement currencies.', 'coinqvest')));
+            }
         }
         return $value;
     }

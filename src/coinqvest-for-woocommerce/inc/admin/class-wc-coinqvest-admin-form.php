@@ -21,63 +21,29 @@ class WC_Coinqvest_Admin_Form {
             'auto' => 'auto - Automatic'
         );
 
-
         $parts = parse_url($_SERVER['REQUEST_URI']);
 
         if (isset($parts['query']) && $parts['query'] == 'page=wc-settings&tab=checkout&section=wc_coinqvest') {
 
             if (!empty($api_key) && !empty($api_secret)) {
 
-                $client = new Api\CQ_Merchant_Client(
-                    $api_key,
-                    $api_secret,
-                    true
-                );
+                $client = new Api\CQ_Merchant_Client($api_key, $api_secret, true);
+                $helpers = new WC_Coinqvest_Helpers();
 
-                $response = $client->get('/fiat-currencies');
-
-                if ($response->httpStatusCode == 200) {
-
-                    $fiats = json_decode($response->responseBody);
-
-                    foreach ($fiats->fiatCurrencies as $currency) {
-
-                        $currencies[$currency->assetCode] = esc_html($currency->assetCode) . ' - ' . esc_html($currency->assetName);
-
-                    }
-
+                $fiats = $helpers->get_fiat_currencies($client);
+                foreach($fiats as $key => $value) {
+                    $currencies[$key] =  esc_html($value);
                 }
 
-                $response = $client->get('/blockchains');
-
-                if ($response->httpStatusCode == 200) {
-
-                    $chains = json_decode($response->responseBody);
-
-                    foreach ($chains->blockchains as $blockchain) {
-
-                        $currencies[$blockchain->nativeAssetCode] = esc_html($blockchain->nativeAssetCode) . ' - ' . esc_html($blockchain->nativeAssetName);
-
-                    }
-
+                $blockchains = $helpers->get_blockchain_currencies($client);
+                foreach($blockchains as $key => $value) {
+                    $currencies[$key] =  esc_html($value);
                 }
 
-                /**
-                 * Get checkout page languages
-                 */
-
-                $response = $client->get('/languages');
-
-                if ($response->httpStatusCode == 200) {
-
-                    $langs = json_decode($response->responseBody);
-
-                    foreach ($langs->languages as $lang) {
-                        $languages[$lang->languageCode] = esc_html($lang->languageCode) . ' - ' . esc_html($lang->name);
-                    }
-
+                $langs = $helpers->get_checkout_languages($client);
+                foreach($langs as $key => $value) {
+                    $languages[$key] =  esc_html($value);
                 }
-
             }
 
         }

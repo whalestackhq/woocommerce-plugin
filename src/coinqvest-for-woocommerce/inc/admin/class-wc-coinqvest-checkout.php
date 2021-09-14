@@ -12,17 +12,14 @@ class WC_Coinqvest_Checkout {
 
 	public function create_checkout($order_id, $options) {
 
+        $helpers = new WC_Coinqvest_Helpers();
 		$order = new \WC_Order($order_id);
 
 		/**
 		 * Init the COINQVEST API
 		 */
 
-		$client = new Api\CQ_Merchant_Client(
-			$options['api_key'],
-			$options['api_secret'],
-			true
-		);
+		$client = new Api\CQ_Merchant_Client($options['api_key'], $options['api_secret'], true);
 
 		/**
 		 * Create a customer first
@@ -45,19 +42,62 @@ class WC_Coinqvest_Checkout {
 		);
 
 		$response = $client->post('/customer', array('customer' => $customer));
-
 		if ($response->httpStatusCode != 200) {
-
 			wc_add_notice(esc_html(__('Failed to create customer. ', 'coinqvest') . $response->responseBody, 'error'));
-
-			return array(
-				'result' => 'error'
-			);
+			return array('result' => 'error');
 		}
 
 		$data = json_decode($response->responseBody, true);
 		$customer_id = $data['customerId']; // use this to associate a checkout with this customer
 
+
+        /**
+         * Check if billing currency is a supported fiat or blockchain currency
+         * If not, the settlement currency will then be used as the new billing currency
+         */
+
+        $quoteCurrency = $order->get_currency();
+        $exchangeRate = null;
+
+        $isFiat = $helpers->isFiat($client, $quoteCurrency);
+        $isBlockchain = $helpers->isBlockchain($client, $quoteCurrency);
+
+        if (!$isFiat && !$isBlockchain) {
+
+            $settlement_currency = $options['settlement_currency'];
+
+            if (!isset($settlement_currency) || $settlement_currency == "0") {
+                wc_add_notice(esc_html(__('Please define a settlement currency in the COINQVEST payment plugin.', 'coinqvest'), 'error'));
+                return array('result' => 'error');
+            }
+
+            /**
+             * Get the exchange rate between billing and settlement currency
+             */
+
+            $pair = array(
+                'quoteCurrency' => $quoteCurrency,
+                'baseCurrency' => $settlement_currency
+            );
+
+            $response = $client->get('/exchange-rate-global', $pair);
+            if ($response->httpStatusCode != 200) {
+                wc_add_notice(esc_html(__('Exchange rate not available. Please try again.', 'coinqvest'), 'error'));
+                return array('result' => 'error');
+            }
+
+            $response = json_decode($response->responseBody);
+            $exchangeRate = $response->exchangeRate;
+
+            if ($exchangeRate == null || $exchangeRate == 0) {
+                wc_add_notice(esc_html(__('Conversion problem. Please contact the vendor.', 'coinqvest'), 'error'));
+                return array('result' => 'error');
+            }
+
+            // set the new billing currency accordingly
+            $quoteCurrency = $settlement_currency;
+
+        }
 
 		/**
 		 * Build the checkout array
@@ -65,16 +105,13 @@ class WC_Coinqvest_Checkout {
 		 */
 
 		$lineItems = array();
-
 		foreach($order->get_items() as $order_item) {
-
 			$lineItem = array(
 				"description" => $order_item['name'],
 				"netAmount" => $order_item['subtotal'] / $order_item['quantity'],
 				"quantity" => $order_item['quantity'],
 				"productId" =>  (string) $order_item['product_id']
 			);
-
 			array_push($lineItems, $lineItem);
 		}
 
@@ -85,14 +122,11 @@ class WC_Coinqvest_Checkout {
 		$order_coupons = $order->get_items('coupon');
 
 		$discountItems = array();
-
 		foreach ($order_coupons as $coupon) {
-
 			$discountItem = array(
 				"description" => $coupon['code'],
 				"netAmount" => $coupon['discount']
 			);
-
 			array_push($discountItems, $discountItem);
 		}
 
@@ -103,15 +137,12 @@ class WC_Coinqvest_Checkout {
 		$order_shipping_items = $order->get_items('shipping');
 
 		$shippingCostItems = array();
-
 		foreach ($order_shipping_items as $shipping_item) {
-
 			$shippingCostItem = array(
 				"description" => $shipping_item['name'],
 				"netAmount" => $shipping_item['total'],
 				"taxable" => $shipping_item['total_tax'] == 0 ? false : true
 			);
-
 			array_push($shippingCostItems, $shippingCostItem);
 		}
 
@@ -122,14 +153,11 @@ class WC_Coinqvest_Checkout {
 		$order_tax_items = $order->get_items('tax');
 
 		$taxItems = array();
-
 		foreach ($order_tax_items as $tax_item) {
-
 			$taxItem = array(
 				"name" => $tax_item['label'],
 				"percent" => $tax_item['rate_percent'] / 100
 			);
-
 			array_push($taxItems, $taxItem);
 		}
 
@@ -141,7 +169,7 @@ class WC_Coinqvest_Checkout {
 
 			"charge" => array(
 				"customerId" => $customer_id,
-				"currency" => $order->get_currency(),
+				"currency" => $quoteCurrency,
 				"lineItems" => $lineItems,
 				"discountItems" => !empty($discountItems) ? $discountItems : null,
 				"shippingCostItems" => !empty($shippingCostItems) ? $shippingCostItems : null,
@@ -150,23 +178,39 @@ class WC_Coinqvest_Checkout {
 		);
 
 		$settlement_currency = $options['settlement_currency'];
-
 		if (isset($settlement_currency) && $settlement_currency != "0") {
 			$checkout['settlementCurrency'] = $settlement_currency;
 		}
 
         $checkout_language = $options['checkout_language'];
-
         if (isset($checkout_language) && $checkout_language != "0") {
             $checkout['checkoutLanguage'] = $checkout_language;
         }
 
 		$checkout['webhook'] = $this->get_webhook_url();
-
 		$checkout['links']['returnUrl'] = $this->get_return_url($order);
-
 		$checkout['links']['cancelUrl'] = $this->get_cancel_url($order);
 
+        /**
+         * Override the charge object with new exchange rate values
+         * Add a charge item that describes the use of the currency exchange rate
+         */
+
+        if (!is_null($exchangeRate)) {
+
+            $checkout = $helpers->overrideCheckoutValues($checkout, $exchangeRate);
+
+            $newLineItem = array(
+                'description' => esc_html(sprintf(__('Exchange Rate 1 %1s = %2s %3s', 'coinqvest'), $order->get_currency(), $helpers->numberFormat(1/$exchangeRate, 7), $quoteCurrency)),
+                'netAmount' => 0
+            );
+            if (isset($checkout['charge']['shippingCostItems'])) {
+                array_push($checkout['charge']['shippingCostItems'], $newLineItem);
+            } else {
+                $checkout['charge']['shippingCostItems'][] = $newLineItem;
+            }
+
+        }
 
         /**
          * Post the checkout
@@ -175,12 +219,8 @@ class WC_Coinqvest_Checkout {
 		$response = $client->post('/checkout/hosted', $checkout);
 
 		if ($response->httpStatusCode != 200) {
-
 			wc_add_notice(esc_html(__('Failed to create checkout. ', 'coinqvest') . $response->responseBody, 'error'));
-
-			return array(
-				'result' => 'error'
-			);
+			return array('result' => 'error');
 		}
 
 		/**
