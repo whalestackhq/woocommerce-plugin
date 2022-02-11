@@ -1,15 +1,15 @@
 # COINQVEST WooCommerce Plugin
 
-This is the official WooCommerce Plugin for COINQVEST. Accept and settle payments in digital currencies in your WooCommerce shop.
+This is the official WooCommerce Plugin for COINQVEST, a leading [cryptocurrency payment processor](https://www.coinqvest.com). Accept Bitcoin on your WooCommerce website and settle payments in crypto and fiat currencies.
 
 This WooCommerce plugin implements the PHP REST API documented at https://www.coinqvest.com/en/api-docs
 
 Key Features
 ------------
-* Accepts Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Stellar Lumens (XLM) and Litecoin (LTC) payments from customers.
+* Accepts Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Stellar Lumens (XLM) and Litecoin (LTC) payments on your WooCommerce shop from customers.
 * Instantly settles in your preferred national currency (USD, EUR, ARS, BRL, NGN) or cryptocurrency (BTC, ETH, LTC, XLM, XRP).
 * Sets the product price in your national currency - 45 fiat currencies are available, see full list [here](https://www.coinqvest.com/en/api-docs#get-exchange-rate-global).
-* Integrates seemlessly into WooCommerce
+* Integrates seemlessly into your WooCommerce website.
 * Sets the product price in your national currency.
 * Sets the checkout page language in your preferred language.
 * Eliminates chargebacks and gives you control over refunds.

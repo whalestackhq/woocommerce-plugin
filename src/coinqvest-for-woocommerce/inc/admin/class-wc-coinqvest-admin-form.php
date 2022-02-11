@@ -13,7 +13,8 @@ class WC_Coinqvest_Admin_Form {
 	public function form_fields($api_key, $api_secret) {
 
 		$currencies = array(
-			'0' => 'Select currency ...'
+			'0' => 'Select currency ...',
+            'ORIGIN' => 'ORIGIN - Settle to the cryptocurrency your client pays with'
 		);
 
 		$languages = array(
@@ -82,7 +83,7 @@ class WC_Coinqvest_Admin_Form {
 			'settlement_currency' => array(
 				'title' => __('Settlement Currency', 'coinqvest'),
 				'type' => 'select',
-				'description' => __('The currency that the crypto payments get converted to. If you don\'t choose a currency here, the settlement currency will be the billing currency. API credentials must be provided before currency options show up.', 'coinqvest'),
+				'description' => __('The currency that the crypto payments get converted to. If you don\'t choose a currency here, the settlement currency will be the billing currency. Choose ORIGIN if you want to get credited in the exact same currency your customer paid in (without any conversion). API credentials must be provided before currency options show up.', 'coinqvest'),
 				'options' => $currencies,
 				'default' => 'default',
 				'desc_tip' => true,
