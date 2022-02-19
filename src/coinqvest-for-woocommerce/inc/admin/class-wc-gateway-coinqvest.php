@@ -90,13 +90,14 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
         }
 
         $value = sanitize_text_field($value);
-        if (empty($value)) {
-            $shopCurrency = get_woocommerce_currency();
-            $client = new Api\CQ_Merchant_Client($this->api_key, $this->api_secret, true);
-            $fiats = new WC_Coinqvest_Helpers();
-            $fiats = $fiats->get_fiat_currencies($client);
-            if (!array_key_exists($shopCurrency, $fiats)) {
-                \WC_Admin_Settings::add_error(esc_html(__(' Please select a settlement currency. Reload this page to see available settlement currencies.', 'coinqvest')));
+        $client = new Api\CQ_Merchant_Client($this->api_key, $this->api_secret, true);
+        $helpers = new WC_Coinqvest_Helpers();
+
+        if (!$helpers->isSupportedCurrency($client, get_woocommerce_currency())) {
+
+            if ($value == "0") {
+                \WC_Admin_Settings::add_error(esc_html(__('Please select a settlement currency.', 'coinqvest')));
+                return $this->get_option('settlement_currency');
             }
         }
         return $value;
@@ -145,6 +146,7 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 		$options['api_key'] = $this->api_key;
 		$options['api_secret'] = $this->api_secret;
 		$options['settlement_currency'] = $this->get_option('settlement_currency');
+        $options['display_currency'] = $this->get_option('display_currency');
         $options['checkout_language'] = $this->get_option('checkout_language');
 
 		$charge = new WC_Coinqvest_Checkout();

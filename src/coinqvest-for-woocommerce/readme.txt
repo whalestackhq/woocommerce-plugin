@@ -80,6 +80,10 @@ Do you have questions or issues with COINQVEST? Feel free to contact us anytime!
 
 == Changelog ==
 
+= 1.1.3 =
+
+* Added parameter 'Checkout page display currency'
+
 = 1.1.2 =
 
 * Added 'ORIGIN' as settlement currency option
