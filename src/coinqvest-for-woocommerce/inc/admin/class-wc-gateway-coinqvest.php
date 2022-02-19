@@ -146,7 +146,7 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 		$options['api_key'] = $this->api_key;
 		$options['api_secret'] = $this->api_secret;
 		$options['settlement_currency'] = $this->get_option('settlement_currency');
-        $options['display_currency'] = $this->get_option('display_currency');
+        $options['display_currency'] = is_null($this->get_option('display_currency')) ? 'USD' : $this->get_option('display_currency');
         $options['checkout_language'] = $this->get_option('checkout_language');
 
 		$charge = new WC_Coinqvest_Checkout();
