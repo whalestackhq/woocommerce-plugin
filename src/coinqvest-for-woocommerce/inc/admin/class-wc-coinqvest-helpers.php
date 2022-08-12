@@ -52,9 +52,9 @@ class WC_Coinqvest_Helpers {
 
     }
 
-    public function overrideCheckoutValues($checkout, $exchangeRate) {
+    public function overrideCheckoutValues($checkout, $exchangeRate, $displayCurrency) {
 
-        $checkout['charge']['currency'] = $checkout['settlementCurrency'];
+        $checkout['charge']['currency'] = ($checkout['settlementCurrency'] == 'ORIGIN') ? $displayCurrency : $checkout['settlementCurrency'];
 
         if (isset($checkout['charge']['lineItems']) && !empty($checkout['charge']['lineItems'])) {
             foreach ($checkout['charge']['lineItems'] as $key => $item) {
@@ -109,6 +109,60 @@ class WC_Coinqvest_Helpers {
             }
         }
         return $isBlockchain;
+
+    }
+
+    public function getSupportedCurrencies($client) {
+
+        $currencies = array();
+
+        if (is_null($client)) {
+            return $currencies;
+        }
+
+        $response = $client->get('/fiat-currencies');
+        $fiat_currencies = json_decode($response->responseBody);
+
+        if ($response->httpStatusCode == 200)
+        {
+            foreach ($fiat_currencies->fiatCurrencies as $currency)
+            {
+                array_push($currencies, $currency->assetCode);
+            }
+        }
+
+        $response = $client->get('/blockchains');
+        $chains = json_decode($response->responseBody);
+
+        if ($response->httpStatusCode == 200)
+        {
+            foreach ($chains->blockchains as $blockchain)
+            {
+                array_push($currencies, $blockchain->nativeAssetCode);
+            }
+        }
+
+        return $currencies;
+
+    }
+
+    public function isSupportedCurrency($client, $currencyCode) {
+
+        if (is_null($client)) {
+            return false;
+        }
+
+        if (is_null($currencyCode) || empty($currencyCode) || strlen($currencyCode) != 3) {
+            return false;
+        }
+
+        $supportedCurrencies = $this->getSupportedCurrencies($client);
+
+        if (in_array($currencyCode, $supportedCurrencies)) {
+            return true;
+        }
+
+        return false;
 
     }
 
