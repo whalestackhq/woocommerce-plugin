@@ -13,15 +13,11 @@ class WC_Coinqvest_Admin_Form {
 	public function form_fields($api_key, $api_secret)
     {
         // default
-        $settlementCurrencies = array(
+        $settlementAssets = array(
             '0' => 'Select Currency...',
             'ORIGIN' => 'ORIGIN - Settle to the cryptocurrency your client pays with'
         );
-        // default
-        $displayCurrencies = array(
-            'USD' => 'USD - US Dollar',
-            'EUR' => 'EUR - Euro'
-        );
+
         // default
         $languages = array(
             '0' => 'Select language ...',
@@ -38,16 +34,9 @@ class WC_Coinqvest_Admin_Form {
 
                 $client = new Api\CQ_Merchant_Client($api_key, $api_secret, true);
 
-                $fiats = $helpers->get_fiat_currencies($client);
-                foreach ($fiats as $key => $value) {
-                    $settlementCurrencies[$key] = esc_html($value);
-                    $displayCurrencies[$key] = esc_html($value);
-                }
-
-                $blockchains = $helpers->get_blockchain_currencies($client);
-                foreach ($blockchains as $key => $value) {
-                    $settlementCurrencies[$key] = esc_html($value);
-                    $displayCurrencies[$key] = esc_html($value);
+                $assets = $helpers->get_assets($client);
+                foreach ($assets as $key => $value) {
+                    $settlementAssets[$key] = esc_html($value);
                 }
 
                 $langs = $helpers->get_checkout_languages($client);
@@ -93,23 +82,11 @@ class WC_Coinqvest_Admin_Form {
                 'title' => __('Settlement Currency', 'coinqvest'),
                 'type' => 'select',
                 'description' => __('The currency that the crypto payments get converted to. If you don\'t choose a currency here, the settlement currency will be the billing currency. Choose ORIGIN if you want to get credited in the exact same currency your customer paid in (without any conversion). API credentials must be provided before currency options show up.', 'coinqvest'),
-                'options' => $settlementCurrencies,
+                'options' => $settlementAssets,
                 'default' => 'default',
                 'desc_tip' => true,
             )
         );
-
-        if (!$helpers->isSupportedCurrency($client, get_woocommerce_currency())) {
-            $form_fields['display_currency'] = array(
-                'title' => __('Checkout Page Display Currency', 'coinqvest'),
-                'type' => 'select',
-                'description' => __('The currency that will be shown on the checkout page. This will only be used if you set the settlement currency to ORIGIN.', 'coinqvest'),
-                'options' => $displayCurrencies,
-                'default' => 'default',
-                'desc_tip' => true,
-            );
-        }
-
         $form_fields['checkout_language'] = array(
             'title' => __('Checkout Page Language', 'coinqvest'),
             'type' => 'select',

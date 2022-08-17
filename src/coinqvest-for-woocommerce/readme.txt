@@ -2,7 +2,7 @@
 Contributors: coinqvest
 Tags: woocommerce, crypto, cryptocurrency, payments, payment gateway, payment processing, digital currencies, bitcoin, stellar, lumens, xlm, btc, eth, xrp, ltc, EUR, USD, NGN, BRL
 Requires at least: 3.9
-Tested up to: 5.9
+Tested up to: 6.0
 Stable tag: 1.1
 Requires PHP: 5.6
 License: Apache 2.0
@@ -79,6 +79,11 @@ Do you have questions or issues with COINQVEST? Feel free to contact us anytime!
 4. COINQVEST Instant Withdrawals
 
 == Changelog ==
+
+= 1.1.4 =
+
+* Reduced number of API calls
+* Few code optimizations
 
 = 1.1.3 =
 
