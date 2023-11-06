@@ -23,7 +23,7 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
 		$this->has_fields = false;
 		$this->order_button_text  = __('Proceed to COINQVEST', 'coinqvest');
 		$this->method_title = 'COINQVEST';
-        $this->method_description = sprintf( __('Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, ARS, BRL, NGN) or digital currencies like Bitcoin. <a href="%1$s" target="_blank">Sign up</a> for a COINQVEST merchant account and <a href="%2$s" target="_blank">get your API credentials</a>.', 'coinqvest'), 'https://www.coinqvest.com?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']), 'https://www.coinqvest.com/en/api-settings?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']));
+        $this->method_description = sprintf( __('Accept crypto and stablecoin payments from your customers and instantly settle in your preferred digital currency. <a href="%1$s" target="_blank">Sign up</a> for a COINQVEST merchant account and <a href="%2$s" target="_blank">get your API credentials</a>.', 'coinqvest'), 'https://www.coinqvest.com?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']), 'https://www.coinqvest.com/en/api-settings?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']));
 
         // Define user set variables.
 		$this->title = $this->get_option('title');
@@ -162,27 +162,11 @@ class WC_Gateway_Coinqvest extends WC_Payment_Gateway {
      */
     function display_coinqvest_payment_data_in_order($order){
 
-        $cq_checkout_id = null;
-        $cq_payment_state = null;
-        $cq_underpaid_accepted_price = null;
-        $cq_refund_id = null;
+        $cq_checkout_id = $order->get_meta('_coinqvest_checkout_id', true );
+        $cq_payment_state = $order->get_meta('_coinqvest_payment_state', true );
+        $cq_underpaid_accepted_price = $order->get_meta('_coinqvest_underpaid_accepted_price', true );
+        $cq_refund_id = $order->get_meta('_coinqvest_refund_id', true );
         $display_info = null;
-        $meta_data = $order->get_meta_data();
-
-        foreach ($meta_data as $item) {
-            if ($item->key == '_coinqvest_checkout_id') {
-                $cq_checkout_id = $item->value;
-            }
-            if ($item->key == '_coinqvest_payment_state') {
-                $cq_payment_state = $item->value;
-            }
-            if ($item->key == '_coinqvest_underpaid_accepted_price') {
-                $cq_underpaid_accepted_price = $item->value;
-            }
-            if ($item->key == '_coinqvest_refund_id') {
-                $cq_refund_id = $item->value;
-            }
-        }
 
         if (is_null($cq_checkout_id)) {
             return;

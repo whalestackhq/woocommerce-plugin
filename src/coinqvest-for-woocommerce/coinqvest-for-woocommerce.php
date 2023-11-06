@@ -2,16 +2,16 @@
 
 /**
  * Plugin Name: COINQVEST for WooCommerce
- * Description: Enterprise Cryptocurrency Payment Processor for WooCommerce - Accept Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Stellar Lumens (XLM) and Litecoin (LTC) from your clients and instantly settle in your preferred payout currency like USD, EUR, ARS, BRL, NGN or cryptocurrency (BTC, ETH, LTC, XLM, XRP).
+ * Description: Cryptocurrency Payment Processor - Accept crypto and stablecoin payments from your customers and instantly settle in your preferred digital currency.
  * Author: COINQVEST
  * Author URI: https://www.coinqvest.com/
- * Version: 1.1.4
+ * Version: 1.1.5
  * License: Apache 2.0
  * License URI: https://www.apache.org/licenses/LICENSE-2.0
  * Text domain: coinqvest-for-woocommerce
  * Domain Path: /languages
  *
- * WC tested up to: 6.8.0
+ * WC tested up to: 8.2.1
  */
 
 namespace WC_COINQVEST;
@@ -23,7 +23,7 @@ defined('ABSPATH') or exit;
  */
 define(__NAMESPACE__ . '\NS', __NAMESPACE__ . '\\');
 define(NS . 'PLUGIN_NAME', 'coinqvest-for-woocommerce');
-define(NS . 'PLUGIN_VERSION', '1.1.4');
+define(NS . 'PLUGIN_VERSION', '1.1.5');
 define(NS . 'PLUGIN_NAME_DIR', plugin_dir_path(__FILE__));
 define(NS . 'PLUGIN_NAME_URL', plugin_dir_url(__FILE__));
 define(NS . 'PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -40,6 +40,11 @@ require_once(PLUGIN_NAME_DIR . 'inc/libraries/autoloader.php');
 register_activation_hook(__FILE__, array(NS . 'Inc\Core\Activator', 'activate'));
 register_deactivation_hook(__FILE__, array(NS . 'Inc\Core\Deactivator', 'deactivate'));
 
+add_action( 'before_woocommerce_init', function() {
+    if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+    }
+} );
 
 /**
  * Plugin Singleton Container

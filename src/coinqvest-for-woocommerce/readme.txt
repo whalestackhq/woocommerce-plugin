@@ -2,13 +2,13 @@
 Contributors: coinqvest
 Tags: woocommerce, crypto, cryptocurrency, payments, payment gateway, payment processing, digital currencies, bitcoin, stellar, lumens, xlm, btc, eth, xrp, ltc, EUR, USD, NGN, BRL
 Requires at least: 3.9
-Tested up to: 6.0
+Tested up to: 6.3
 Stable tag: 1.1
 Requires PHP: 5.6
 License: Apache 2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
-Accept digital currencies from your clients and settle instantly in your preferred national payout currency (USD, EUR, BRL, NGN) or cryptocurrencies like Bitcoin.
+Accept Bitcoin, other crypto and stablecoin payments from your customers and instantly settle in your preferred digital currency.
 
 == Description ==
 
@@ -18,8 +18,8 @@ The COINQVEST crypto payment gateway supports 45 billing currencies and easily l
 
 = Key features =
 
-* Accepts Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Stellar Lumens (XLM) and Litecoin (LTC) payments on your WooCommerce shop from customers.
-* Instantly settles in your preferred national currency (USD, EUR, ARS, BRL, NGN) or above crypto currencies.
+* Accepts Bitcoin (BTC), Bitcoin Lightning (BTCLN), Litecoin (LTC), Stellar Lumens (XLM) and USDC payments on your WooCommerce shop from customers.
+* Instantly settles in your preferred digital currency (crypto or stablecoin).
 * Sets the product price in your national currency - 45 fiat currencies are available, see full list [here](https://www.coinqvest.com/en/api-docs#get-exchange-rate-global).
 * Integrates seemlessly into your WooCommerce website.
 * Sets the product price in your national currency.
@@ -79,6 +79,10 @@ Do you have questions or issues with COINQVEST? Feel free to contact us anytime!
 4. COINQVEST Instant Withdrawals
 
 == Changelog ==
+
+= 1.1.5 =
+
+* Added compatibility for high-performace order storage (HPOS)
 
 = 1.1.4 =
 

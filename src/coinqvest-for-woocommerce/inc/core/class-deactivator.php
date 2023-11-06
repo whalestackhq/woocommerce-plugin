@@ -1,8 +1,8 @@
 <?php
 
-namespace COINQVEST\Inc\Core;
+namespace WC_COINQVEST\Inc\Core;
 
-class WC_Deactivator {
+class Deactivator {
 
 	public static function deactivate() {
 
