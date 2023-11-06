@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: COINQVEST for WooCommerce v0.0.1\n"
-"POT-Creation-Date: 2022-08-17 12:23+0200\n"
+"POT-Creation-Date: 2023-11-06 10:51+0100\n"
 "PO-Revision-Date: 2020-05-23 10:41+0200\n"
 "Last-Translator: \n"
 "Language-Team: COINQVEST www.coinqvest.com\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Basepath: ../inc/admin\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e\n"
@@ -146,7 +146,7 @@ msgstr ""
 
 #: class-wc-gateway-coinqvest.php:26
 #, php-format
-msgid "Accept payments in crypto (BTC, ETH, XRP, XLM, LTC) and instantly settle in your local currency (USD, EUR, ARS, BRL, NGN) or digital currencies like Bitcoin. <a href=\"%1$s\" target=\"_blank\">Sign up</a> for a COINQVEST merchant account and <a href=\"%2$s\" target=\"_blank\">get your API credentials</a>."
+msgid "Accept crypto and stablecoin payments from your customers and instantly settle in your preferred digital currency. <a href=\"%1$s\" target=\"_blank\">Sign up</a> for a COINQVEST merchant account and <a href=\"%2$s\" target=\"_blank\">get your API credentials</a>."
 msgstr ""
 
 #: class-wc-gateway-coinqvest.php:30
