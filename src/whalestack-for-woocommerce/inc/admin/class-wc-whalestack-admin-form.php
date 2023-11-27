@@ -1,10 +1,10 @@
 <?php
-namespace WC_COINQVEST\Inc\Admin;
-use WC_COINQVEST\Inc\Libraries\Api;
+namespace WC_Whalestack\Inc\Admin;
+use WC_Whalestack\Inc\Libraries\Api;
 
 defined('ABSPATH') or exit;
 
-class WC_Coinqvest_Admin_Form {
+class WC_Whalestack_Admin_Form {
 
 	public function __construct() {
 
@@ -14,7 +14,7 @@ class WC_Coinqvest_Admin_Form {
     {
         // default
         $settlementAssets = array(
-            '0' => 'Select Currency...',
+            '0' => 'Select asset...',
             'ORIGIN' => 'ORIGIN - Settle to the cryptocurrency your client pays with'
         );
 
@@ -26,13 +26,13 @@ class WC_Coinqvest_Admin_Form {
 
         $parts = parse_url($_SERVER['REQUEST_URI']);
         $client = null;
-        $helpers = new WC_Coinqvest_Helpers();
+        $helpers = new WC_Whalestack_Helpers();
 
-        if (isset($parts['query']) && $parts['query'] == 'page=wc-settings&tab=checkout&section=wc_coinqvest') {
+        if (isset($parts['query']) && $parts['query'] == 'page=wc-settings&tab=checkout&section=wc_whalestack') {
 
             if (!empty($api_key) && !empty($api_secret)) {
 
-                $client = new Api\CQ_Merchant_Client($api_key, $api_secret, true);
+                $client = new Api\WS_Merchant_Client($api_key, $api_secret, true);
 
                 $assets = $helpers->get_assets($client);
                 foreach ($assets as $key => $value) {
@@ -51,14 +51,14 @@ class WC_Coinqvest_Admin_Form {
             'enabled' => array(
                 'title' => __('Enable/Disable', 'woocommerce'),
                 'type' => 'checkbox',
-                'label' => __('Enable COINQVEST Payments', 'coinqvest'),
+                'label' => __('Enable Whalestack Payments', 'whalestack'),
                 'default' => 'no',
             ),
             'title' => array(
                 'title' => __('Title', 'woocommerce'),
                 'type' => 'text',
                 'description' => __('This controls the title which the user sees during checkout.', 'woocommerce'),
-                'default' => __('Bitcoin and other cryptocurrencies', 'coinqvest'),
+                'default' => __('Bitcoin and Stablecoins', 'whalestack'),
                 'desc_tip' => true,
             ),
             'description' => array(
@@ -66,39 +66,39 @@ class WC_Coinqvest_Admin_Form {
                 'type' => 'text',
                 'desc_tip' => true,
                 'description' => __('This controls the description which the user sees during checkout.', 'woocommerce'),
-                'default' => __('Pay with BTC, ETH, XRP, XLM, LTC', 'coinqvest'),
+                'default' => __('Pay with BTC, LTC, Lightning, XLM, USDC, EURC via Whalestack.com', 'whalestack'),
             ),
             'api_key' => array(
-                'title' => __('API Key', 'coinqvest'),
+                'title' => __('API Key', 'whalestack'),
                 'type' => 'text',
-                'description' => sprintf(__('Get your API Key from the COINQVEST Settings page, available %s.', 'coinqvest'), '<a href="https://www.coinqvest.com/en/api-settings?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']) . '" target="_blank">here</a>'),
+                'description' => sprintf(__('Get your API Key from the Whalestack Settings page, available %s.', 'whalestack'), '<a href="https://www.whalestack.com/en/api-settings" target="_blank">here</a>'),
             ),
             'api_secret' => array(
-                'title' => __('API Secret', 'coinqvest'),
+                'title' => __('API Secret', 'whalestack'),
                 'type' => 'text',
-                'description' => sprintf(__('Get your API Secret from the COINQVEST Settings page, available %s.', 'coinqvest'), '<a href="https://www.coinqvest.com/en/api-settings?utm_source=woocommerce&utm_medium=' . esc_html($_SERVER['SERVER_NAME']) . '" target="_blank">here</a>')
+                'description' => sprintf(__('Get your API Secret from the Whalestack Settings page, available %s.', 'whalestack'), '<a href="https://www.whalestack.com/en/api-settings" target="_blank">here</a>')
             ),
             'settlement_currency' => array(
-                'title' => __('Settlement Currency', 'coinqvest'),
+                'title' => __('Settlement Asset', 'whalestack'),
                 'type' => 'select',
-                'description' => __('The currency that the crypto payments get converted to. If you don\'t choose a currency here, the settlement currency will be the billing currency. Choose ORIGIN if you want to get credited in the exact same currency your customer paid in (without any conversion). API credentials must be provided before currency options show up.', 'coinqvest'),
+                'description' => __('The currency/asset that the payments get converted to. If you don\'t choose an asset, the settlement asset will be the payment currency. Choose ORIGIN if you want to get credited in the exact same currency your customer paid in (without any conversion). API credentials must be provided before currency options show up.', 'whalestack'),
                 'options' => $settlementAssets,
                 'default' => 'default',
                 'desc_tip' => true,
             )
         );
         $form_fields['checkout_language'] = array(
-            'title' => __('Checkout Page Language', 'coinqvest'),
+            'title' => __('Checkout Page Language', 'whalestack'),
             'type' => 'select',
-            'description' => __('The language that your checkout page will display in. Choose \'auto\' to automatically detect the customer\'s main browser language. Fallback language code is \'en\'.', 'coinqvest'),
+            'description' => __('The language that your checkout page will display in. Choose \'auto\' to automatically detect the customer\'s main browser language. Fallback language code is \'en\'.', 'whalestack'),
             'options' => $languages,
             'default' => 'default',
             'desc_tip' => true,
         );
         $form_fields['show_icons'] = array(
-            'title' => __('Show logo', 'coinqvest'),
+            'title' => __('Show logo', 'whalestack'),
             'type' => 'checkbox',
-            'label' => __('Display COINQVEST logo on checkout page.', 'coinqvest'),
+            'label' => __('Display Whalestack logo on checkout page.', 'whalestack'),
             'default' => 'yes',
         );
         $form_fields['debug'] = array(
@@ -106,7 +106,7 @@ class WC_Coinqvest_Admin_Form {
             'type' => 'checkbox',
             'label' => __('Enable logging', 'woocommerce'),
             'default' => 'no',
-            'description' => sprintf(__('Log COINQVEST API events inside %s', 'coinqvest'), '<code>' . \WC_Log_Handler_File::get_log_file_path('coinqvest') . '</code>'),
+            'description' => sprintf(__('Log Whalestack API events inside %s', 'whalestack'), '<code>' . \WC_Log_Handler_File::get_log_file_path('whalestack') . '</code>'),
         );
 
 		return $form_fields;

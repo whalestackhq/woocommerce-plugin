@@ -1,14 +1,14 @@
 <?php
-namespace WC_COINQVEST\Inc\Libraries\Api;
+namespace WC_Whalestack\Inc\Libraries\Api;
 
 defined('ABSPATH') or exit;
 
 /**
- * Class CQ_Rest_Client
+ * Class WS_Rest_Client
  *
- * The base class for the COINQVEST Merchant API client.
+ * The base class for the Whalestack Merchant API client.
  */
-class CQ_Rest_Client {
+class WS_Rest_Client {
 
     protected $scheme;
     protected $host;
@@ -33,7 +33,7 @@ class CQ_Rest_Client {
      * @param array $query
      * @param array $headers
      * @param array $customOptions
-     * @return CQ_Rest_Client_Response_Object
+     * @return WS_Rest_Client_Response_Object
      */
     protected function sendRequest($endpoint, $requestType, $requestBody = array(), $sendAsJson = false, $query = array(), $headers = array(), $customOptions = array()) {
 
@@ -42,7 +42,7 @@ class CQ_Rest_Client {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'COINQVEST REST Client (Base)');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Whalestack REST Client (Base)');
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
         curl_setopt($ch, CURLOPT_TIMEOUT, 180);
         curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
@@ -91,7 +91,7 @@ class CQ_Rest_Client {
             list($responseHeaders, $responseBody) = explode($separator, $response, 2);
         }
 
-        $restClientResponseObject = new CQ_Rest_Client_Response_Object(
+        $restClientResponseObject = new WS_Rest_Client_Response_Object(
             $responseBody,
             $responseHeaders,
             curl_getinfo($ch, CURLINFO_HTTP_CODE),

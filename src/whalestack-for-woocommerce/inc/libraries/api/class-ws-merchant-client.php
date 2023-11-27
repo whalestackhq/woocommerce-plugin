@@ -1,19 +1,19 @@
 <?php
-namespace WC_COINQVEST\Inc\Libraries\Api;
-use WC_COINQVEST\Inc\Core\Init;
+namespace WC_Whalestack\Inc\Libraries\Api;
+use WC_Whalestack\Inc\Core\Init;
 
 defined('ABSPATH') or exit;
 
 /**
- * Class CQ_Merchant_Client
+ * Class WS_Merchant_Client
  *
- * PHP implementation of a REST client for the COINQVEST Merchant API
- * see https://www.coinqvest.com/en/api-docs
+ * PHP implementation of a REST client for the Whalestack Merchant API
+ * see https://www.whalestack.com/en/api-docs
  */
-class CQ_Merchant_Client extends CQ_Rest_Client {
+class WS_Merchant_Client extends WS_Rest_Client {
 
     /**
-     * The API Key as given by https://www.coinqvest.com/en/api-settings
+     * The API Key as given by https://www.whalestack.com/en/api-settings
      * This is initialized by the constructor, see below.
      *
      * @var string
@@ -21,7 +21,7 @@ class CQ_Merchant_Client extends CQ_Rest_Client {
     var $key = null;
 
     /**
-     * The API Secret as given by https://www.coinqvest.com/en/api-settings
+     * The API Secret as given by https://www.whalestack.com/en/api-settings
      * This is initialized by the constructor, see below.
      *
      * @var string
@@ -66,10 +66,10 @@ class CQ_Merchant_Client extends CQ_Rest_Client {
     var $logFile = null;
 
     /**
-     * Merchant API client constructor, initialize this with the API key and secret as given by https://www.coinqvest.com/en/api-settings
+     * Merchant API client constructor, initialize this with the API key and secret as given by https://www.whalestack.com/en/api-settings
      *
-     * @param string $key Your COINQVEST API Key
-     * @param string $secret Your COINQVEST API Secret
+     * @param string $key Your Whalestack API Key
+     * @param string $secret Your Whalestack API Secret
      * @param string $logFile Log file location, if any
      */
     public function __construct($key = null, $secret = null, $logFile = null) {
@@ -82,7 +82,7 @@ class CQ_Merchant_Client extends CQ_Rest_Client {
             $this->enableLogging = true;
         }
 
-        parent::__construct('https', 'www.coinqvest.com', '/api/' . $this->apiVersion);
+        parent::__construct('https', 'www.whalestack.com', '/api/' . $this->apiVersion);
 
     }
 
@@ -91,15 +91,15 @@ class CQ_Merchant_Client extends CQ_Rest_Client {
      *
      * @param string $endpoint
      * @param array $params, a list of GET parameters to be included in the request
-     * @return CQ_Rest_Client_Response_Object
+     * @return WS_Rest_Client_Response_Object
      */
     public function get($endpoint = '/', $params = array()) {
 
         $method = 'GET';
         $authHeaders = $this->buildAuthHeaders($endpoint, $method, $params);
         $response = parent::sendRequest($endpoint, $method, array(), false, $params, $authHeaders, $this->buildCustomOptions());
-        $this->log("[CQMerchantClient][get] Request: GET $endpoint Params: " . json_encode($params) . " Auth Headers: " . json_encode($authHeaders));
-        $this->log("[CQMerchantClient][get] Response: " . json_encode($response));
+        $this->log("[WSMerchantClient][get] Request: GET $endpoint Params: " . json_encode($params) . " Auth Headers: " . json_encode($authHeaders));
+        $this->log("[WSMerchantClient][get] Response: " . json_encode($response));
         return $response;
 
     }
@@ -109,15 +109,15 @@ class CQ_Merchant_Client extends CQ_Rest_Client {
      *
      * @param string $endpoint
      * @param array $params, an array representing the JSON payload to include in this request
-     * @return CQ_Rest_Client_Response_Object
+     * @return WS_Rest_Client_Response_Object
      */
     public function post($endpoint = '/', $params = array()) {
 
         $method = 'POST';
         $authHeaders = $this->buildAuthHeaders($endpoint, $method, $params);
         $response = $this->sendRequest($endpoint, $method, $params, true, array(), $authHeaders, $this->buildCustomOptions());
-        $this->log("[CQMerchantClient][post] Request: GET $endpoint Params: " . json_encode($params) . " Auth Headers: " . json_encode($authHeaders));
-        $this->log("[CQMerchantClient][post] Response: " . json_encode($response));
+        $this->log("[WSMerchantClient][post] Request: GET $endpoint Params: " . json_encode($params) . " Auth Headers: " . json_encode($authHeaders));
+        $this->log("[WSMerchantClient][post] Response: " . json_encode($response));
         return $response;
     }
 
@@ -126,15 +126,15 @@ class CQ_Merchant_Client extends CQ_Rest_Client {
      *
      * @param string $endpoint
      * @param array $params, an array representing the JSON payload to include in this request
-     * @return CQ_Rest_Client_Response_Object
+     * @return WS_Rest_Client_Response_Object
      */
     public function delete($endpoint = '/', $params = array()) {
 
         $method = 'DELETE';
         $authHeaders = $this->buildAuthHeaders($endpoint, $method, $params);
         $response = $this->sendRequest($endpoint, $method, $params, true, array(), $authHeaders, $this->buildCustomOptions());
-        $this->log("[CQMerchantClient][delete] Request: DELETE $endpoint Params: " . json_encode($params) . " Auth Headers: " . json_encode($authHeaders));
-        $this->log("[CQMerchantClient][delete] Response: " . json_encode($response));
+        $this->log("[WSMerchantClient][delete] Request: DELETE $endpoint Params: " . json_encode($params) . " Auth Headers: " . json_encode($authHeaders));
+        $this->log("[WSMerchantClient][delete] Response: " . json_encode($response));
         return $response;
 
     }
@@ -144,15 +144,15 @@ class CQ_Merchant_Client extends CQ_Rest_Client {
      *
      * @param string $endpoint
      * @param array $params, an array representing the JSON payload to include in this request
-     * @return CQ_Rest_Client_Response_Object
+     * @return WS_Rest_Client_Response_Object
      */
     public function put($endpoint = '/', $params = array()) {
 
         $method = 'PUT';
         $authHeaders = $this->buildAuthHeaders($endpoint, $method, $params);
         $response = $this->sendRequest($endpoint, $method, $params, true, array(), $authHeaders, $this->buildCustomOptions());
-        $this->log("[CQMerchantClient][put] Request: PUT $endpoint Params: " . json_encode($params) . " Auth Headers: " . json_encode($authHeaders));
-        $this->log("[CQMerchantClient][put] Response: " . json_encode($response));
+        $this->log("[WSMerchantClient][put] Request: PUT $endpoint Params: " . json_encode($params) . " Auth Headers: " . json_encode($authHeaders));
+        $this->log("[WSMerchantClient][put] Response: " . json_encode($response));
         return $response;
 
     }
@@ -190,7 +190,7 @@ class CQ_Merchant_Client extends CQ_Rest_Client {
     private function fetchTimestamp() {
 
         $timestamp = time();
-        $client = new CQ_REST_Client('https', 'www.coinqvest.com', '/api/v1');
+        $client = new WS_REST_Client('https', 'www.whalestack.com', '/api/v1');
 
         $response = $client->sendRequest('/time', 'GET');
         if ($response->httpStatusCode != 200) {
@@ -224,7 +224,7 @@ class CQ_Merchant_Client extends CQ_Rest_Client {
             return;
         }
 
-        CQ_Logging_Service::write($message);
+        WS_Logging_Service::write($message);
 
     }
 

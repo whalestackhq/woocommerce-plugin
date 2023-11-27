@@ -1,14 +1,14 @@
 <?php
-namespace WC_COINQVEST\Inc\Libraries\Api;
+namespace WC_Whalestack\Inc\Libraries\Api;
 
 defined('ABSPATH') or exit;
 
 /**
- * Class CQ_Rest_Client_Response_Object
+ * Class WS_Rest_Client_Response_Object
  *
- * An instance of this class is returned by the get, post, put or delete methods in CQ_Merchant_Client
+ * An instance of this class is returned by the get, post, put or delete methods in WS_Merchant_Client
  */
-class CQ_Rest_Client_Response_Object {
+class WS_Rest_Client_Response_Object {
 
     /**
      * Contains the HTTP response in plain text. Usually this is a JSON string
@@ -23,7 +23,7 @@ class CQ_Rest_Client_Response_Object {
     var $responseHeaders = null;
 
     /**
-     * The numeric HTTP status code, as given by the COINQVEST server
+     * The numeric HTTP status code, as given by the Whalestack server
      * @var integer
      */
     var $httpStatusCode = null;

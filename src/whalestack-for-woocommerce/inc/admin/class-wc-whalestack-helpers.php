@@ -1,9 +1,9 @@
 <?php
-namespace WC_COINQVEST\Inc\Admin;
+namespace WC_Whalestack\Inc\Admin;
 
 defined('ABSPATH') or exit;
 
-class WC_Coinqvest_Helpers {
+class WC_Whalestack_Helpers {
 
 	public function __construct() {
 
@@ -16,7 +16,7 @@ class WC_Coinqvest_Helpers {
         if ($response->httpStatusCode == 200) {
             $items = json_decode($response->responseBody);
             foreach ($items->assets as $asset) {
-                $assets[$asset->assetCode] = $asset->assetCode . ' - ' . $asset->name;
+                $assets[$asset->id] = $asset->assetCode . ' - ' . $asset->name;
             }
         }
         return $assets;
