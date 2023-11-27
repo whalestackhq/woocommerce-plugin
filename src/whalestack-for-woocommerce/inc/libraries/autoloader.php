@@ -3,7 +3,7 @@
  * Dynamically loads the class attempting to be instantiated elsewhere in the
  * plugin by looking at the $class_name parameter being passed as an argument.
  *
- * The argument should be in the form: WC_COINQVEST\Namespace. The
+ * The argument should be in the form: WC_Whalestack\Namespace. The
  * function will then break the fully-qualified class name into its pieces and
  * will then build a file to the path based on the namespace.
  *
@@ -17,7 +17,7 @@ spl_autoload_register(function($class_name) {
 
 
 		// If the specified $class_name does not include our namespace, duck out.
-		if (false === strpos($class_name, 'WC_COINQVEST')) {
+		if (false === strpos($class_name, 'WC_Whalestack')) {
 			return;
 		}
 

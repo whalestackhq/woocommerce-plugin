@@ -1,10 +1,10 @@
 <?php
-namespace WC_COINQVEST\Inc\Admin;
-use WC_COINQVEST\Inc\Libraries\Api;
+namespace WC_Whalestack\Inc\Admin;
+use WC_Whalestack\Inc\Libraries\Api;
 
 defined('ABSPATH') or exit;
 
-class WC_Coinqvest_Checkout {
+class WC_Whalestack_Checkout {
 
 	public function __construct() {
 
@@ -15,10 +15,10 @@ class WC_Coinqvest_Checkout {
 		$order = new \WC_Order($order_id);
 
 		/**
-		 * Init the COINQVEST API
+		 * Init the Whalestack API
 		 */
 
-		$client = new Api\CQ_Merchant_Client($options['api_key'], $options['api_secret'], true);
+		$client = new Api\WS_Merchant_Client($options['api_key'], $options['api_secret'], true);
 
 		/**
 		 * Create a customer first
@@ -42,7 +42,7 @@ class WC_Coinqvest_Checkout {
 
 		$response = $client->post('/customer', array('customer' => $customer));
 		if ($response->httpStatusCode != 200) {
-			wc_add_notice(esc_html(__('Failed to create customer. ', 'coinqvest') . $response->responseBody, 'error'));
+			wc_add_notice(esc_html(__('Failed to create customer. ', 'whalestack') . $response->responseBody, 'error'));
 			return array('result' => 'error');
 		}
 
@@ -130,12 +130,12 @@ class WC_Coinqvest_Checkout {
 
         /**
          * Validate the checkout charge
-         * If WooCommerce order total does not match CQs charge total, use simple checkout charge as fallback
+         * If WooCommerce order total does not match WSs charge total, use simple checkout charge as fallback
          */
 
         $response = $client->post('/checkout/validate-checkout-charge', $checkout);
         if ($response->httpStatusCode != 200) {
-            wc_add_notice(esc_html(__('Checkout charge could not be validated. ', 'coinqvest') . $response->responseBody, 'error'));
+            wc_add_notice(esc_html(__('Checkout charge could not be validated. ', 'whalestack') . $response->responseBody, 'error'));
             return array('result' => 'error');
         }
 
@@ -178,7 +178,7 @@ class WC_Coinqvest_Checkout {
 		$response = $client->post('/checkout/hosted', $checkout);
 
 		if ($response->httpStatusCode != 200) {
-			wc_add_notice(esc_html(__('Failed to create checkout. ', 'coinqvest') . $response->responseBody, 'error'));
+			wc_add_notice(esc_html(__('Failed to create checkout. ', 'whalestack') . $response->responseBody, 'error'));
 			return array('result' => 'error');
 		}
 
@@ -190,7 +190,7 @@ class WC_Coinqvest_Checkout {
 		$id = $data['id'];
 		$url = $data['url'];
 
-		$order->update_meta_data('_coinqvest_checkout_id', esc_attr($id));
+		$order->update_meta_data('_whalestack_checkout_id', esc_attr($id));
 		$order->save();
 
 		return array(
@@ -237,7 +237,7 @@ class WC_Coinqvest_Checkout {
 	 * @return string
 	 */
 	public function get_webhook_url() {
-		return add_query_arg('wc-api', 'WC_COINQVEST', trailingslashit(get_home_url()));
+		return add_query_arg('wc-api', 'WC_Whalestack', trailingslashit(get_home_url()));
 	}
 
 

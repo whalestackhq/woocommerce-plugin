@@ -1,6 +1,6 @@
 <?php
 
-namespace WC_COINQVEST\Inc\Core;
+namespace WC_Whalestack\Inc\Core;
 
 /**
  * Define the internationalization functionality.

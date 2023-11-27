@@ -1,9 +1,9 @@
 <?php
 
-namespace WC_COINQVEST\Inc\Core;
-use WC_COINQVEST as CQ;
-use WC_COINQVEST\Inc\Admin as Admin;
-use WC_COINQVEST\Inc\Frontend as Frontend;
+namespace WC_Whalestack\Inc\Core;
+use WC_Whalestack as WS;
+use WC_Whalestack\Inc\Admin as Admin;
+use WC_Whalestack\Inc\Frontend as Frontend;
 
 class Init {
 
@@ -18,13 +18,13 @@ class Init {
 	// define the core functionality of the plugin.
 	public function __construct() {
 
-		$this->plugin_name = CQ\PLUGIN_NAME;
-		$this->version = CQ\PLUGIN_VERSION;
-		$this->plugin_basename = CQ\PLUGIN_BASENAME;
-		$this->plugin_text_domain = CQ\PLUGIN_TEXT_DOMAIN;
-		$this->plugin_name_url =CQ\PLUGIN_NAME_URL;
-		$this->plugin_name_dir =CQ\PLUGIN_NAME_DIR;
-		$this->plugin_basename = CQ\PLUGIN_BASENAME;
+		$this->plugin_name = WS\PLUGIN_NAME;
+		$this->version = WS\PLUGIN_VERSION;
+		$this->plugin_basename = WS\PLUGIN_BASENAME;
+		$this->plugin_text_domain = WS\PLUGIN_TEXT_DOMAIN;
+		$this->plugin_name_url =WS\PLUGIN_NAME_URL;
+		$this->plugin_name_dir =WS\PLUGIN_NAME_DIR;
+		$this->plugin_basename = WS\PLUGIN_BASENAME;
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -75,7 +75,7 @@ class Init {
 
 		$plugin_admin = new Admin\Admin($this->get_plugin_name(), $this->get_version(), $this->get_plugin_text_domain(), $this->get_plugin_name_url(), $this->get_plugin_basename());
 
-		$this->loader->add_action('plugins_loaded', $plugin_admin, 'init_wc_coinqvest');
+		$this->loader->add_action('plugins_loaded', $plugin_admin, 'init_wc_whalestack');
 
 	}
 
@@ -138,8 +138,8 @@ class Init {
 	    global $wp_version;
 	    $wp = 'WP ' . $wp_version;
 	    $woo = 'Woo ' . $this->get_woo_version();
-        $cq = 'CQ ' . $this->get_version();
-	    return $wp . ', ' . $woo . ', ' . $cq;
+        $whalestack = 'WS ' . $this->get_version();
+	    return $wp . ', ' . $woo . ', ' . $whalestack;
     }
 
     public function get_woo_version() {

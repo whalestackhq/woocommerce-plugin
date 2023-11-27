@@ -1,0 +1,198 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Whalestack for WooCommerce v0.0.1\n"
+"POT-Creation-Date: 2023-11-27 09:30+0100\n"
+"PO-Revision-Date: 2020-05-23 10:41+0200\n"
+"Last-Translator: \n"
+"Language-Team: Whalestack www.whalestack.com\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.1\n"
+"X-Poedit-Basepath: ../inc/admin\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: class-wc-gateway-whalestack.php:24
+msgid "Place order now"
+msgstr ""
+
+#: class-wc-gateway-whalestack.php:26
+#, php-format
+msgid "Accept crypto and stablecoin payments from your customers and instantly settle in your preferred digital currency. <br /><a href=\"%1$s\" target=\"_blank\">Sign up</a> for a Whalestack account and <a href=\"%2$s\" target=\"_blank\">get your API credentials</a>."
+msgstr ""
+
+#: class-wc-gateway-whalestack.php:65
+msgid "Please enter your API key."
+msgstr ""
+
+#: class-wc-gateway-whalestack.php:68
+msgid "API Key seems to be wrong. Please double check."
+msgstr ""
+
+#: class-wc-gateway-whalestack.php:78
+msgid "Please enter your API secret."
+msgstr ""
+
+#: class-wc-gateway-whalestack.php:81
+msgid "API Secret seems to be wrong. Please double check."
+msgstr ""
+
+#: class-wc-gateway-whalestack.php:95
+msgid "Please select a settlement currency."
+msgstr ""
+
+#: class-wc-gateway-whalestack.php:180
+#, php-format
+msgid "Payment was successfully completed. Find payment details <a href=\"%s\" target=\"_blank\">here</a>."
+msgstr ""
+
+#: class-wc-gateway-whalestack.php:186
+#, php-format
+msgid "Action required: Payment was underpaid by customer. Go to the payment details page to resolve it <a href=\"%s\" target=\"_blank\">here</a>."
+msgstr ""
+
+#: class-wc-gateway-whalestack.php:192
+#, php-format
+msgid "This checkout was originally billed at %1$s but underpaid by your customer and manually accepted at %2$s. Find payment details <a href=\"%3$s\" target=\"_blank\">here</a>."
+msgstr ""
+
+#: class-wc-gateway-whalestack.php:198
+#, php-format
+msgid "This order was refunded. Find refund details <a href=\"%s\" target=\"_blank\">here</a>."
+msgstr ""
+
+#: class-wc-gateway-whalestack.php:206
+msgid "Whalestack Payment Details"
+msgstr ""
+
+#: class-wc-gateway-whalestack.php:207
+msgid "Checkout Id"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:52
+msgid "Enable/Disable"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:54
+msgid "Enable Whalestack Payments"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:58
+msgid "Title"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:60
+msgid "This controls the title which the user sees during checkout."
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:61
+msgid "Bitcoin and Stablecoins"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:65
+msgid "Description"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:68
+msgid "This controls the description which the user sees during checkout."
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:69
+msgid "Pay with BTC, LTC, Lightning, XLM, USDC, EURC via Whalestack.com"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:72
+msgid "API Key"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:74
+#, php-format
+msgid "Get your API Key from the Whalestack Settings page, available %s."
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:77
+msgid "API Secret"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:79
+#, php-format
+msgid "Get your API Secret from the Whalestack Settings page, available %s."
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:82
+msgid "Settlement Asset"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:84
+msgid "The currency/asset that the payments get converted to. If you don't choose an asset, the settlement asset will be the payment currency. Choose ORIGIN if you want to get credited in the exact same currency your customer paid in (without any conversion). API credentials must be provided before currency options show up."
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:91
+msgid "Checkout Page Language"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:93
+msgid "The language that your checkout page will display in. Choose 'auto' to automatically detect the customer's main browser language. Fallback language code is 'en'."
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:99
+msgid "Show logo"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:101
+msgid "Display Whalestack logo on checkout page."
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:105
+msgid "Debug log"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:107
+msgid "Enable logging"
+msgstr ""
+
+#: class-wc-whalestack-admin-form.php:109
+#, php-format
+msgid "Log Whalestack API events inside %s"
+msgstr ""
+
+#: class-wc-whalestack-checkout.php:45
+msgid "Failed to create customer. "
+msgstr ""
+
+#: class-wc-whalestack-checkout.php:78
+msgid "Coupon"
+msgstr ""
+
+#: class-wc-whalestack-checkout.php:138
+msgid "Checkout charge could not be validated. "
+msgstr ""
+
+#: class-wc-whalestack-checkout.php:181
+msgid "Failed to create checkout. "
+msgstr ""
+
+#: class-wc-whalestack-webhook-handler.php:151
+#, php-format
+msgid "Whalestack payment was successfully processed. Find payment details <a href=\"%s\" target=\"_blank\">here</a>."
+msgstr ""
+
+#: class-wc-whalestack-webhook-handler.php:162
+#, php-format
+msgid "Whalestack payment was underpaid by customer. See details and options to resolve it <a href=\"%s\" target=\"_blank\">here</a>."
+msgstr ""
+
+#: class-wc-whalestack-webhook-handler.php:173
+#, php-format
+msgid "Underpaid by customer, but payment manually accepted at %1$s and completed. Find payment details <a href=\"%2$s\" target=\"_blank\">here</a>."
+msgstr ""
+
+#: class-wc-whalestack-webhook-handler.php:187
+#, php-format
+msgid "Order amount was refunded successfully to customer. See details <a href=\"%s\" target=\"_blank\">here</a>."
+msgstr ""

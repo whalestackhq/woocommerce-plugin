@@ -1,11 +1,11 @@
 <?php
-namespace WC_COINQVEST\Inc\Admin;
+namespace WC_Whalestack\Inc\Admin;
 
-use WC_COINQVEST\Inc\Libraries\Api\CQ_Logging_Service;
+use WC_Whalestack\Inc\Libraries\Api\WS_Logging_Service;
 
 defined('ABSPATH') or exit;
 
-class WC_Coinqvest_Webhook_Handler {
+class WC_Whalestack_Webhook_Handler {
 
 	protected $api_secret;
 
@@ -23,7 +23,7 @@ class WC_Coinqvest_Webhook_Handler {
 
 		if (('POST' !== $_SERVER['REQUEST_METHOD'])
 		     || !isset($_GET['wc-api'])
-		     || ('WC_COINQVEST' !== $_GET['wc-api'])
+		     || ('WC_Whalestack' !== $_GET['wc-api'])
 		) {
 			return;
 		}
@@ -32,7 +32,7 @@ class WC_Coinqvest_Webhook_Handler {
 		$request_headers = array_change_key_case($this->get_request_headers(), CASE_UPPER);
 
         if (empty($payload) || !$this->validate_webhook($request_headers, $payload)) {
-            CQ_Logging_Service::write('Incoming webhook failed validation: ' . print_r( $payload, true));
+            WS_Logging_Service::write('Incoming webhook failed validation: ' . print_r( $payload, true));
             status_header(401);
             exit;
         }
@@ -52,7 +52,7 @@ class WC_Coinqvest_Webhook_Handler {
 
 
         $orders = wc_get_orders(array(
-            '_coinqvest_checkout_id' => $payload_decoded['data']['checkout']['id']
+            '_whalestack_checkout_id' => $payload_decoded['data']['checkout']['id']
         ));
 
         if (empty($orders)) {
@@ -70,17 +70,17 @@ class WC_Coinqvest_Webhook_Handler {
 	}
 
 	/**
-	 * Handle a custom '_coinqvest_checkout_id' query var to get orders with the '_coinqvest_checkout_id' meta.
+	 * Handle a custom '_whalestack_checkout_id' query var to get orders with the '_whalestack_checkout_id' meta.
 	 * @param array $query - Args for WP_Query.
 	 * @param array $query_vars - Query vars from WC_Order_Query.
 	 * @return array modified $query
 	 */
 	public function get_order_by_checkout_id($query, $query_vars) {
 
-		if (!empty($query_vars['_coinqvest_checkout_id'])) {
+		if (!empty($query_vars['_whalestack_checkout_id'])) {
 			$query['meta_query'][] = array(
-				'key' => '_coinqvest_checkout_id',
-				'value' => esc_attr($query_vars['_coinqvest_checkout_id']),
+				'key' => '_whalestack_checkout_id',
+				'value' => esc_attr($query_vars['_whalestack_checkout_id']),
 			);
 		}
 
@@ -138,17 +138,17 @@ class WC_Coinqvest_Webhook_Handler {
 
         $woo_order_id = $order->get_id();
         $woo_order_state = $order->get_status();
-        $cq_payload_state = $payload['eventType'];
+        $whalestack_payload_state = $payload['eventType'];
 
-        switch ($cq_payload_state) {
+        switch ($whalestack_payload_state) {
 
             case 'CHECKOUT_COMPLETED':
 
                 $checkout = $payload['data']['checkout'];
                 if (!in_array($woo_order_state, array('completed', 'processing'))) {
-                    $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $checkout['id'];
+                    $payment_details_page = 'https://www.whalestack.com/en/payment/checkout-id/' . $checkout['id'];
                     $order->update_status('processing');
-                    $order->add_order_note('<span style="color:#079047">' . sprintf(__('COINQVEST payment was successfully processed. Find payment details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>');
+                    $order->add_order_note('<span style="color:#079047">' . sprintf(__('Whalestack payment was successfully processed. Find payment details <a href="%s" target="_blank">here</a>.', 'whalestack'), esc_url($payment_details_page)) . '</span>');
                     $order->payment_complete();
                 }
                 break;
@@ -157,9 +157,9 @@ class WC_Coinqvest_Webhook_Handler {
 
                 $checkout = $payload['data']['checkout'];
                 if (!in_array($woo_order_state, array('completed', 'processing'))) {
-                    $payment_details_page = 'https://www.coinqvest.com/en/unresolved-charge/checkout-id/' . $checkout['id'];
+                    $payment_details_page = 'https://www.whalestack.com/en/unresolved-charge/checkout-id/' . $checkout['id'];
                     $order->update_status('on-hold');
-                    $order->add_order_note('<span style="color:#cc292f">' . sprintf(__('COINQVEST payment was underpaid by customer. See details and options to resolve it <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>');
+                    $order->add_order_note('<span style="color:#cc292f">' . sprintf(__('Whalestack payment was underpaid by customer. See details and options to resolve it <a href="%s" target="_blank">here</a>.', 'whalestack'), esc_url($payment_details_page)) . '</span>');
                 }
                 break;
 
@@ -167,12 +167,12 @@ class WC_Coinqvest_Webhook_Handler {
 
                 $checkout = $payload['data']['checkout'];
                 if (!in_array($woo_order_state, array('completed', 'processing'))) {
-                    $payment_details_page = 'https://www.coinqvest.com/en/payment/checkout-id/' . $checkout['id'];
+                    $payment_details_page = 'https://www.whalestack.com/en/payment/checkout-id/' . $checkout['id'];
                     $underpaid_accepted_price = $checkout['settlementAmountReceived'] . ' ' . $order->get_currency();
                     $order->update_status('processing');
-                    $order->add_order_note('<span style="color:#079047">' . sprintf(__('Underpaid by customer, but payment manually accepted at %1$s and completed. Find payment details <a href="%2$s" target="_blank">here</a>.', 'coinqvest'), esc_attr($underpaid_accepted_price), esc_url($payment_details_page)) . '</span>');
+                    $order->add_order_note('<span style="color:#079047">' . sprintf(__('Underpaid by customer, but payment manually accepted at %1$s and completed. Find payment details <a href="%2$s" target="_blank">here</a>.', 'whalestack'), esc_attr($underpaid_accepted_price), esc_url($payment_details_page)) . '</span>');
                     $order->payment_complete();
-                    $order->update_meta_data('_coinqvest_underpaid_accepted_price', esc_attr($underpaid_accepted_price));
+                    $order->update_meta_data('_whalestack_underpaid_accepted_price', esc_attr($underpaid_accepted_price));
                 }
                 break;
 
@@ -182,18 +182,18 @@ class WC_Coinqvest_Webhook_Handler {
                 $context = $payload['data']['refund']['context'];
 
                 if (in_array($context, array('COMPLETED_CHECKOUT', 'UNDERPAID_CHECKOUT'))) {
-                    $payment_details_page = 'https://www.coinqvest.com/en/refund/' . $refund['id'];
+                    $payment_details_page = 'https://www.whalestack.com/en/refund/' . $refund['id'];
                     $order->update_status('refunded');
-                    $order->add_order_note('<span style="color:#007cba;">' . sprintf(__('Order amount was refunded successfully to customer. See details <a href="%s" target="_blank">here</a>.', 'coinqvest'), esc_url($payment_details_page)) . '</span>');
-                    $order->update_meta_data('_coinqvest_refund_id', esc_attr($refund['id']));
+                    $order->add_order_note('<span style="color:#007cba;">' . sprintf(__('Order amount was refunded successfully to customer. See details <a href="%s" target="_blank">here</a>.', 'whalestack'), esc_url($payment_details_page)) . '</span>');
+                    $order->update_meta_data('_whalestack_refund_id', esc_attr($refund['id']));
                 }
                 break;
 
             default:
-                CQ_Logging_Service::write('Unresolved payload event for order id ' . $woo_order_id . print_r( $payload, true));
+                WS_Logging_Service::write('Unresolved payload event for order id ' . $woo_order_id . print_r( $payload, true));
         }
 
-        $order->update_meta_data('_coinqvest_payment_state', esc_attr($cq_payload_state));
+        $order->update_meta_data('_whalestack_payment_state', esc_attr($whalestack_payload_state));
         $order->save();
 
 	}

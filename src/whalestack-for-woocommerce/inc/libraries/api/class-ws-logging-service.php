@@ -1,14 +1,14 @@
 <?php
-namespace WC_COINQVEST\Inc\Libraries\Api;
+namespace WC_Whalestack\Inc\Libraries\Api;
 
 defined('ABSPATH') or exit;
 
 /**
- * Class CQ_Logging_Service
+ * Class WS_Logging_Service
  *
  * A logging service
  */
-class CQ_Logging_Service {
+class WS_Logging_Service {
 
 	/** @var bool Whether or not logging is enabled */
 	public static $log_enabled = false;
@@ -27,7 +27,7 @@ class CQ_Logging_Service {
 			if (empty( self::$log)) {
 				self::$log = wc_get_logger();
 			}
-			self::$log->log( $level, $message, array('source' => 'coinqvest'));
+			self::$log->log( $level, $message, array('source' => 'whalestack'));
 		}
 	}
 

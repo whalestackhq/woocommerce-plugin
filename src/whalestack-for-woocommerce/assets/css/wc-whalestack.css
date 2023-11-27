@@ -1,0 +1,4 @@
+.woocommerce-checkout #payment ul.payment_methods li img.whalestack-checkout-logo {
+    max-width: 200px;
+    max-height: 14px;
+}
